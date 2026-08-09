@@ -8,3 +8,8 @@
 
 ## Commands
 - `pnpm dev` / `pnpm build` / `pnpm content:build` / `pnpm media:download`
+
+## Deploy
+- Do **not** link the GitHub org repo in the Netlify UI (team pricing).
+- Netlify site `nonprofit-resources` (personal team) is manual/CLI-only.
+- GitHub Actions workflow `Deploy Netlify` pushes builds; secrets: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`.

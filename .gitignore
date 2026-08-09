@@ -20,6 +20,10 @@
 !scripts/**
 !data/
 !data/.gitkeep
+!.github/
+!.github/**
+!.github/workflows/
+!.github/workflows/**
 
-# Local Netlify folder
+# Local Netlify folder (CLI link only — deploys come from GitHub Actions)
 .netlify

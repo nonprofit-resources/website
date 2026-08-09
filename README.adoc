@@ -24,4 +24,8 @@ Local catalog works from seed data without Turso; auth and submissions need a da
 
 == Deploy
 
-Netlify (`netlify.toml`). Primary domain: `nonprofit-resources.org` (`.com` redirects via infra).
+Netlify is a **blank / manual** site on the personal team (no GitHub org repo connection — avoids Netlify team pricing).
+
+CI: `.github/workflows/deploy-netlify.yml` builds on GitHub Actions and runs `netlify deploy` with `NETLIFY_AUTH_TOKEN` + `NETLIFY_SITE_ID` secrets.
+
+Primary domain: `nonprofit-resources.org` (`.com` redirects in `netlify.toml`).

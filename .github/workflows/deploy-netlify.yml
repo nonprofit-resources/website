@@ -1,0 +1,114 @@
+# Deploy via CLI from GitHub Actions — Netlify stays a blank/manual site (no org-repo Git link).
+name: Deploy Netlify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: netlify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          NODE_ENV: production
+          SITE_URL: ${{ vars.SITE_URL || 'https://nonprofit-resources.org' }}
+          BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'https://nonprofit-resources.org' }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          CUSTOMER_IO_SITE_ID: ${{ secrets.CUSTOMER_IO_SITE_ID }}
+          CUSTOMER_IO_API_KEY: ${{ secrets.CUSTOMER_IO_API_KEY }}
+          CUSTOMER_IO_TRACK_API_KEY: ${{ secrets.CUSTOMER_IO_TRACK_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM: ${{ vars.RESEND_FROM }}
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy preview
+        if: github.event_name == 'pull_request'
+        id: preview
+        run: |
+          netlify deploy \
+            --dir=dist \
+            --functions=.netlify/functions-internal \
+            --alias="pr-${{ github.event.pull_request.number }}" \
+            --json > deploy.json
+          echo "url=$(node -pe 'JSON.parse(require("fs").readFileSync("deploy.json","utf8")).deploy_url')" >> "$GITHUB_OUTPUT"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Comment preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.preview.outputs.url }}';
+            if (!url) return;
+            const body = `Netlify preview: ${url}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((c) => c.user?.type === 'Bot' && c.body?.includes('Netlify preview:'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Deploy production
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          netlify deploy \
+            --prod \
+            --dir=dist \
+            --functions=.netlify/functions-internal \
+            --message "github ${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
