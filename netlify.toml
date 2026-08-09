@@ -7,6 +7,18 @@
   NODE_VERSION = "22"
   NODE_OPTIONS = "--max-old-space-size=4096"
 
+[[redirects]]
+  from = "https://nonprofit-resources.com/*"
+  to = "https://nonprofit-resources.org/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.nonprofit-resources.com/*"
+  to = "https://nonprofit-resources.org/:splat"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
