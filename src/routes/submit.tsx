@@ -10,13 +10,18 @@ export default function SubmitPage() {
   async function onSubmit(e: Event) {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    if (data.absolutelyFree === "1") data.absolutelyFree = "true";
+    else data.absolutelyFree = "false";
     setStatus("loading");
     try {
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          absolutelyFree: data.absolutelyFree === "true",
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Submission failed");
@@ -69,6 +74,15 @@ export default function SubmitPage() {
             <option value="free_oss">Free / open software</option>
             <option value="meta_directory">Meta directory</option>
           </select>
+        </label>
+        <label class="flex items-start gap-2 text-sm">
+          <input type="checkbox" name="absolutelyFree" value="1" class="mt-1" />
+          <span>
+            <span class="font-medium">Absolutely free</span>
+            <span class="mt-0.5 block text-muted-foreground">
+              Core offer costs $0 after eligibility (not credits-only or paid discounts).
+            </span>
+          </span>
         </label>
         <label class="block text-sm">
           <span class="mb-1.5 block font-medium">Summary</span>

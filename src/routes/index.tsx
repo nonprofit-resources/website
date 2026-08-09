@@ -31,6 +31,11 @@ export default function Home() {
             <A href="/services">
               <Button size="lg">{t("cta_browse")}</Button>
             </A>
+            <A href="/services?free=1">
+              <Button size="lg" variant="secondary">
+                Absolutely free only
+              </Button>
+            </A>
             <A href="/submit">
               <Button size="lg" variant="outline">
                 {t("cta_submit")}

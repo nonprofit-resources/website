@@ -1,29 +1,69 @@
 import { Title } from "@solidjs/meta";
-import { createMemo, createSignal, For, Show } from "solid-js";
+import { useSearchParams } from "@solidjs/router";
+import { createEffect, createMemo, createSignal, onMount, Show } from "solid-js";
+import { CatalogFilterPanel } from "~/components/catalog-filters";
 import { ServiceGrid, ServiceList } from "~/components/service-views";
 import { Button } from "~/components/ui/button";
+import {
+  applyCatalogFilters,
+  defaultCatalogFilters,
+  filtersFromSearchParams,
+  filtersToSearchParams,
+  type CatalogFilterState,
+} from "~/lib/catalog-filters";
 import { useI18n } from "~/lib/i18n";
-import { bypassesGatekeepers, servicesSeed, type CategoryId } from "~/lib/services-seed";
+import { servicesSeed } from "~/lib/services-seed";
 import { SITE_NAME } from "~/lib/utils";
 
 type ViewMode = "grid" | "list";
 
+function paramsToURLSearchParams(params: Record<string, string | string[] | undefined>) {
+  const usp = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value == null || value === "") continue;
+    if (Array.isArray(value)) {
+      for (const v of value) if (v) usp.append(key, v);
+    } else {
+      usp.set(key, value);
+    }
+  }
+  return usp;
+}
+
 export default function ServicesPage() {
   const { t } = useI18n();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [view, setView] = createSignal<ViewMode>("grid");
-  const [category, setCategory] = createSignal<CategoryId | "all">("all");
-  const [bypassOnly, setBypassOnly] = createSignal(false);
+  const [filters, setFilters] = createSignal<CatalogFilterState>(defaultCatalogFilters());
+  const [hydrated, setHydrated] = createSignal(false);
 
-  const categories = () =>
-    Array.from(new Set(servicesSeed.map((s) => s.category))).sort() as CategoryId[];
+  onMount(() => {
+    setFilters(filtersFromSearchParams(paramsToURLSearchParams(searchParams)));
+    setHydrated(true);
+  });
 
-  const filtered = createMemo(() =>
-    servicesSeed.filter((s) => {
-      if (category() !== "all" && s.category !== category()) return false;
-      if (bypassOnly() && !bypassesGatekeepers(s)) return false;
-      return true;
-    }),
-  );
+  createEffect(() => {
+    if (!hydrated()) return;
+    const next = filtersToSearchParams(filters());
+    const obj: Record<string, string | undefined> = {
+      q: undefined,
+      free: undefined,
+      bypass: undefined,
+      noverif: undefined,
+      featured: undefined,
+      nometa: undefined,
+      cat: undefined,
+      offer: undefined,
+      kind: undefined,
+      status: undefined,
+      sort: undefined,
+    };
+    for (const [k, v] of next.entries()) obj[k] = v;
+    setSearchParams(obj, { replace: true });
+  });
+
+  const filtered = createMemo(() => applyCatalogFilters(servicesSeed, filters()));
+  const clear = () => setFilters(defaultCatalogFilters());
 
   return (
     <div class="space-y-6">
@@ -32,7 +72,7 @@ export default function ServicesPage() {
         <div>
           <h1 class="font-display text-3xl font-semibold">Services</h1>
           <p class="mt-1 text-muted-foreground">
-            Nonprofit plans, DIY options, free software, and meta-directories.
+            Search and filter nonprofit plans, DIY options, free software, and meta-directories.
           </p>
         </div>
         <div class="inline-flex rounded-md border border-border p-0.5">
@@ -53,33 +93,31 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3">
-        <label class="text-sm text-muted-foreground" for="cat">
-          Category
-        </label>
-        <select
-          id="cat"
-          class="h-9 rounded-md border border-input bg-background px-2 text-sm"
-          value={category()}
-          onChange={(e) => setCategory(e.currentTarget.value as CategoryId | "all")}
-        >
-          <option value="all">All</option>
-          <For each={categories()}>
-            {(c) => <option value={c}>{c.replaceAll("_", " ")}</option>}
-          </For>
-        </select>
-        <label class="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            checked={bypassOnly()}
-            onChange={(e) => setBypassOnly(e.currentTarget.checked)}
-          />
-          Bypass gatekeepers (no TechSoup/Goodstack token)
-        </label>
-      </div>
+      <CatalogFilterPanel
+        filters={filters}
+        setFilters={setFilters}
+        onClear={clear}
+        resultCount={filtered().length}
+        totalCount={servicesSeed.length}
+      />
 
-      <Show when={view() === "grid"} fallback={<ServiceList services={filtered()} />}>
-        <ServiceGrid services={filtered()} />
+      <Show
+        when={filtered().length > 0}
+        fallback={
+          <div class="rounded-lg border border-dashed border-border px-6 py-12 text-center">
+            <p class="font-medium">No matching resources</p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Try clearing “Absolutely free” or widening categories.
+            </p>
+            <Button class="mt-4" variant="outline" onClick={clear}>
+              Clear filters
+            </Button>
+          </div>
+        }
+      >
+        <Show when={view() === "grid"} fallback={<ServiceList services={filtered()} />}>
+          <ServiceGrid services={filtered()} />
+        </Show>
       </Show>
     </div>
   );

@@ -1,7 +1,8 @@
 import { A } from "@solidjs/router";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import type { ServiceSeed } from "~/lib/services-seed";
+import { CATEGORY_LABELS, OFFER_TYPE_LABELS, type ServiceSeed } from "~/lib/services-seed";
+import { cn } from "~/lib/utils";
 
 function ServiceIcon(props: { name: string; hint?: string }) {
   const letter = () => (props.name[0] ?? "?").toUpperCase();
@@ -31,6 +32,14 @@ function ServiceIcon(props: { name: string; hint?: string }) {
   );
 }
 
+function FreeBadge() {
+  return (
+    <span class="rounded bg-accent/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent">
+      Free
+    </span>
+  );
+}
+
 export function ServiceGrid(props: { services: ServiceSeed[] }) {
   return (
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -41,14 +50,19 @@ export function ServiceGrid(props: { services: ServiceSeed[] }) {
               <CardHeader class="flex flex-row items-start gap-3 space-y-0">
                 <ServiceIcon name={s.name} hint={s.iconHint ?? s.slug} />
                 <div class="min-w-0">
-                  <CardTitle class="text-base">{s.name}</CardTitle>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <CardTitle class="text-base">{s.name}</CardTitle>
+                    <Show when={s.absolutelyFree}>
+                      <FreeBadge />
+                    </Show>
+                  </div>
                   <CardDescription class="mt-1 line-clamp-2">{s.summary}</CardDescription>
                 </div>
               </CardHeader>
               <CardContent>
                 <div class="flex flex-wrap gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
-                  <span class="rounded bg-muted px-2 py-0.5">{s.category.replaceAll("_", " ")}</span>
-                  <span class="rounded bg-muted px-2 py-0.5">{s.offerType.replaceAll("_", " ")}</span>
+                  <span class="rounded bg-muted px-2 py-0.5">{CATEGORY_LABELS[s.category]}</span>
+                  <span class="rounded bg-muted px-2 py-0.5">{OFFER_TYPE_LABELS[s.offerType]}</span>
                 </div>
               </CardContent>
             </Card>
@@ -71,11 +85,20 @@ export function ServiceList(props: { services: ServiceSeed[] }) {
             >
               <ServiceIcon name={s.name} hint={s.iconHint ?? s.slug} />
               <div class="min-w-0 flex-1">
-                <div class="font-medium text-foreground">{s.name}</div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-medium text-foreground">{s.name}</span>
+                  <Show when={s.absolutelyFree}>
+                    <FreeBadge />
+                  </Show>
+                </div>
                 <div class="truncate text-sm text-muted-foreground">{s.summary}</div>
               </div>
-              <span class="hidden text-xs text-muted-foreground sm:inline">
-                {s.category.replaceAll("_", " ")}
+              <span
+                class={cn(
+                  "hidden text-xs text-muted-foreground sm:inline",
+                )}
+              >
+                {CATEGORY_LABELS[s.category]}
               </span>
             </A>
           </li>

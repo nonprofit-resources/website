@@ -10,6 +10,7 @@ export async function POST(event: { request: Request }) {
       offerKind?: string;
       summary?: string;
       submitterEmail?: string;
+      absolutelyFree?: boolean | string;
     };
 
     if (!body.name?.trim() || !body.portalUrl?.trim() || !body.summary?.trim()) {
@@ -17,8 +18,10 @@ export async function POST(event: { request: Request }) {
     }
 
     const id = randomUUID();
+    const absolutelyFree =
+      body.absolutelyFree === true || body.absolutelyFree === "true" || body.absolutelyFree === "1";
     // Persist when Turso is configured; always acknowledge + optional tx mail.
-    console.info("[submit]", id, body.name, body.portalUrl);
+    console.info("[submit]", id, body.name, body.portalUrl, { absolutelyFree });
 
     if (body.submitterEmail) {
       await sendTransactionalEmail({
