@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "slug": "2026-08-09-launch",
+      "title": "Launching Nonprofit Resources",
+      "date": "2026-08-09",
+      "summary": "Why we are building a catalog outside the sales funnel.",
+      "html": "<div class=\"paragraph\">\n<p>Nonprofit operators should not have to dig through GitHub raw lists or TechSoup consulting funnels to find free and discounted digital tools.</p>\n</div>\n<div class=\"paragraph\">\n<p><strong>Nonprofit Resources</strong> is a consumer-grade catalog of first-party vendor portals, community meta-directories, DIY options, and free software — with verification notes and AlternativeTo links where helpful.</p>\n</div>\n<div class=\"paragraph\">\n<p>Subscribe to this news feed for catalog updates and offer-change alerts.</p>\n</div>",
+      "file": "2026-08-09-launch.adoc"
+    }
+  ]
+}

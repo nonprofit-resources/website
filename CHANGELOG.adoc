@@ -1,0 +1,5 @@
+= Changelog
+
+== 2026-08-09
+
+* Initial SolidStart catalog scaffold: services grid/list, news/blog AsciiDoc, theme, i18n shell, Better Auth + Turso wiring, Customer.io subscribe, Resend transactional helpers.

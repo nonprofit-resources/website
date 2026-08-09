@@ -1,0 +1,13 @@
+= How to evaluate a nonprofit software discount
+:description: A short checklist before you apply for a vendor nonprofit plan.
+:revdate: 2026-08-09
+
+Before you apply:
+
+. Confirm your organization type (often 501(c)(3) or country equivalent).
+. Prefer *direct* vendor portals that accept an EIN or determination letter when you want to skip intermediary tokens.
+. Capture the offer details (seats, credits, renewal) and a verification date — discounts drift.
+. Cross-check https://alternativeto.net/[AlternativeTo] for free and open substitutes.
+. Record who in your org owns renewals and compliance.
+
+We will expand this guide as the catalog grows.

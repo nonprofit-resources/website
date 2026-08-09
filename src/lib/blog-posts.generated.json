@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "slug": "2026-08-09-evaluate-discounts",
+      "title": "How to evaluate a nonprofit software discount",
+      "date": "2026-08-09",
+      "summary": "A short checklist before you apply for a vendor nonprofit plan.",
+      "html": "<div class=\"paragraph\">\n<p>Before you apply:</p>\n</div>\n<div class=\"olist arabic\">\n<ol class=\"arabic\">\n<li>\n<p>Confirm your organization type (often 501(c)(3) or country equivalent).</p>\n</li>\n<li>\n<p>Prefer <strong>direct</strong> vendor portals that accept an EIN or determination letter when you want to skip intermediary tokens.</p>\n</li>\n<li>\n<p>Capture the offer details (seats, credits, renewal) and a verification date — discounts drift.</p>\n</li>\n<li>\n<p>Cross-check <a href=\"https://alternativeto.net/\">AlternativeTo</a> for free and open substitutes.</p>\n</li>\n<li>\n<p>Record who in your org owns renewals and compliance.</p>\n</li>\n</ol>\n</div>\n<div class=\"paragraph\">\n<p>We will expand this guide as the catalog grows.</p>\n</div>",
+      "file": "2026-08-09-evaluate-discounts.adoc"
+    }
+  ]
+}

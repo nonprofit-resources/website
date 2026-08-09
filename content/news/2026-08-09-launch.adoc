@@ -1,0 +1,9 @@
+= Launching Nonprofit Resources
+:description: Why we are building a catalog outside the sales funnel.
+:revdate: 2026-08-09
+
+Nonprofit operators should not have to dig through GitHub raw lists or TechSoup consulting funnels to find free and discounted digital tools.
+
+*Nonprofit Resources* is a consumer-grade catalog of first-party vendor portals, community meta-directories, DIY options, and free software — with verification notes and AlternativeTo links where helpful.
+
+Subscribe to this news feed for catalog updates and offer-change alerts.
