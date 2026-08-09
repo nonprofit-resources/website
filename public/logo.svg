@@ -1,6 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <rect width="128" height="128" rx="28" fill="#F4F0E6"/>
-  <rect x="18" y="26" width="92" height="76" rx="16" fill="#2F6B55" fill-opacity="0.14" stroke="#2F6B55" stroke-width="3"/>
-  <path d="M34 82V50h16c9 0 14.5 4.4 14.5 12S59 74 50 74H44v8H34zm12-22v12h4.2c4.8 0 7.3-2.1 7.3-6s-2.5-6-7.3-6H46zM68 82V50h24v9H80v4h12v8H80v11H68z" fill="#2F6B55"/>
-  <circle cx="98" cy="36" r="10" fill="#C45C2A"/>
+  <!-- heart offered upward -->
+  <path
+    fill="#C45C2A"
+    d="M64 22c-1.6-3.6-7.2-9.4-14-9.4C41.6 12.6 36 18.4 36 25.4c0 11.6 13.2 20.6 28 31.2 14.8-10.6 28-19.6 28-31.2 0-7-5.6-12.8-14-12.8C71.2 12.6 65.6 18.4 64 22z"
+  />
+  <!-- open palm (base) -->
+  <path
+    fill="#2F6B55"
+    d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
+  />
+  <!-- thumb (left, slightly angled) -->
+  <path
+    fill="#2F6B55"
+    d="M30 78c0-5 4-9 9-9h5c3.3 0 6 2.7 6 6v16c0 2.8-2.2 5-5 5h-4c-6.1 0-11-4.9-11-11V78z"
+  />
+  <!-- four fingers, separated gaps so it reads as an open hand -->
+  <rect x="48" y="54" width="10" height="28" rx="5" fill="#2F6B55"/>
+  <rect x="61" y="50" width="10" height="32" rx="5" fill="#2F6B55"/>
+  <rect x="74" y="52" width="10" height="30" rx="5" fill="#2F6B55"/>
+  <rect x="87" y="56" width="10" height="26" rx="5" fill="#2F6B55"/>
 </svg>

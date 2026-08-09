@@ -1,22 +1,34 @@
 import type { ComponentProps } from "solid-js";
 import { cn } from "~/lib/utils";
 
+/** Giving hand offering a heart — matches public/logo.svg */
 export function LogoMark(props: ComponentProps<"svg">) {
   return (
     <svg
-      viewBox="0 0 64 64"
+      viewBox="0 0 128 128"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       {...props}
       class={cn("size-8", props.class)}
     >
-      <rect x="4" y="8" width="56" height="48" rx="10" class="fill-primary/15 stroke-primary" stroke-width="2" />
+      <rect width="128" height="128" rx="28" class="fill-muted" />
       <path
-        d="M16 40V24h8.5c5 0 8 2.6 8 7s-3 7-8 7H22v2h-6zm6-12v8h2.2c2.8 0 4.3-1.3 4.3-4s-1.5-4-4.3-4H22zM36 40V24h14v5h-8v2.5h7.2v4.5H42V40h-6z"
-        class="fill-primary"
+        class="fill-accent"
+        d="M64 22c-1.6-3.6-7.2-9.4-14-9.4C41.6 12.6 36 18.4 36 25.4c0 11.6 13.2 20.6 28 31.2 14.8-10.6 28-19.6 28-31.2 0-7-5.6-12.8-14-12.8C71.2 12.6 65.6 18.4 64 22z"
       />
-      <circle cx="50" cy="16" r="5" class="fill-accent" />
+      <path
+        class="fill-primary"
+        d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
+      />
+      <path
+        class="fill-primary"
+        d="M30 78c0-5 4-9 9-9h5c3.3 0 6 2.7 6 6v16c0 2.8-2.2 5-5 5h-4c-6.1 0-11-4.9-11-11V78z"
+      />
+      <rect x="48" y="54" width="10" height="28" rx="5" class="fill-primary" />
+      <rect x="61" y="50" width="10" height="32" rx="5" class="fill-primary" />
+      <rect x="74" y="52" width="10" height="30" rx="5" class="fill-primary" />
+      <rect x="87" y="56" width="10" height="26" rx="5" class="fill-primary" />
     </svg>
   );
 }
