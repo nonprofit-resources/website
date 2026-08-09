@@ -20,3 +20,6 @@
 !scripts/**
 !data/
 !data/.gitkeep
+
+# Local Netlify folder
+.netlify
