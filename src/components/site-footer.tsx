@@ -10,14 +10,14 @@ export function SiteFooter() {
   const { t } = useI18n();
   const year = new Date().getFullYear();
   return (
-    <footer class="mx-auto mt-16 max-w-6xl px-4 pb-14 sm:px-6">
-      <div class="flex flex-col gap-8 border-t border-border/70 pt-8 sm:flex-row sm:items-start sm:justify-between">
+    <footer class="mx-auto mt-12 max-w-6xl px-4 pb-12 sm:px-6">
+      <div class="flex flex-col gap-7 border-t border-border/70 pt-7 sm:flex-row sm:items-start sm:justify-between">
         <div class="max-w-xs">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2.5">
             <LogoMark class="size-7 text-primary" />
             <span class="font-display text-sm font-semibold tracking-tight">{SITE_NAME}</span>
           </div>
-          <p class="mt-3 text-sm text-muted-foreground">
+          <p class="mt-2.5 text-sm leading-relaxed text-muted-foreground">
             Cataloguing nonprofit plans, DIY options, and free software. Operated by Ryan Johnson
             (AMDphreak) pending a formal nonprofit entity.
           </p>
@@ -27,7 +27,7 @@ export function SiteFooter() {
             </a>
           </p>
         </div>
-        <div class="flex flex-wrap gap-x-10 gap-y-6 font-mono text-[10px] uppercase tracking-[0.22em]">
+        <div class="flex flex-wrap gap-x-8 gap-y-5 text-[11px] font-medium uppercase tracking-[0.16em]">
           <nav class="flex flex-col gap-2" aria-label={t("footer_product")}>
             <span class="text-muted-foreground/70">{t("footer_product")}</span>
             <A href="/services" class={footLink}>
@@ -99,7 +99,7 @@ export function SiteFooter() {
           </nav>
         </div>
       </div>
-      <p class="mt-8 text-xs text-muted-foreground">© {year} {SITE_NAME}</p>
+      <p class="mt-7 text-xs text-muted-foreground">© {year} {SITE_NAME}</p>
     </footer>
   );
 }

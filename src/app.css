@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (
@@ -6,9 +6,9 @@
 );
 
 @theme {
-  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-mono: "Source Sans 3", ui-monospace, monospace;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -30,6 +30,7 @@
 }
 
 :root {
+  color-scheme: light;
   --background: 42 33% 97%;
   --foreground: 160 28% 12%;
   --card: 42 40% 99%;
@@ -50,6 +51,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: 160 22% 8%;
   --foreground: 42 20% 94%;
   --card: 160 18% 11%;
@@ -69,23 +71,38 @@
   --input: 160 12% 20%;
 }
 
-html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
+/* Theme swap: background settles fast; ink/chrome eases a beat longer (avoids * {transition} stutter). */
+html.theme-transition {
+  transition: background-color 160ms ease !important;
+}
+html.theme-transition body {
   transition:
-    background-color 280ms ease,
-    color 280ms ease,
+    background-color 160ms ease,
+    color 320ms ease !important;
+}
+html.theme-transition .border-border,
+html.theme-transition [class*="border-"],
+html.theme-transition [class*="bg-"],
+html.theme-transition [class*="text-"] {
+  transition:
+    color 320ms ease,
+    background-color 160ms ease,
     border-color 280ms ease,
     fill 280ms ease,
-    stroke 280ms ease,
-    box-shadow 280ms ease !important;
+    stroke 280ms ease !important;
+}
+
+html {
+  background-color: hsl(var(--background));
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
+  font-feature-settings: "ss01" on, "kern" on;
+  letter-spacing: -0.011em;
+  line-height: 1.55;
   background:
     radial-gradient(1200px 500px at 10% -10%, hsl(158 40% 40% / 0.12), transparent 60%),
     radial-gradient(900px 420px at 90% 0%, hsl(22 60% 50% / 0.1), transparent 55%),
@@ -95,15 +112,19 @@ body {
 
 .font-display {
   font-family: var(--font-display);
+  letter-spacing: -0.025em;
 }
 
 .prose-adoc h2 {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  margin-top: 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
 }
 .prose-adoc p {
-  margin: 0.75rem 0;
+  margin: 0.65rem 0;
   line-height: 1.65;
 }
 .prose-adoc a {

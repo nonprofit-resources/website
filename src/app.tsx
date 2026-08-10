@@ -21,7 +21,7 @@ export default function App() {
               <div class="flex min-h-screen flex-col">
                 <BrandBar />
                 <StickyNav />
-                <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
+                <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
                   <Suspense fallback={<div class="text-muted-foreground">Loading…</div>}>
                     {props.children}
                   </Suspense>

@@ -1,6 +1,5 @@
 import {
   createContext,
-  createEffect,
   createSignal,
   onCleanup,
   onMount,
@@ -18,59 +17,67 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue>();
 
-const STORAGE_KEY = "nr-theme";
+export const STORAGE_KEY = "nr-theme";
 
 function systemTheme(): Theme {
   if (typeof window === "undefined") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function applyTheme(theme: Theme) {
+/** Apply without transition (boot / SSR hydrate). */
+function applyThemeInstant(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.remove("theme-transition");
+  root.classList.toggle("dark", theme === "dark");
+  root.dataset.kbTheme = theme;
+  root.style.colorScheme = theme;
+}
+
+/** Apply with transition (user toggle). */
+function applyThemeAnimated(theme: Theme) {
   const root = document.documentElement;
   root.classList.add("theme-transition");
   root.classList.toggle("dark", theme === "dark");
   root.dataset.kbTheme = theme;
   root.style.colorScheme = theme;
-  window.setTimeout(() => root.classList.remove("theme-transition"), 320);
+  window.setTimeout(() => root.classList.remove("theme-transition"), 360);
 }
 
 export function ThemeProvider(props: ParentProps) {
   const [theme, setThemeSignal] = createSignal<Theme>("light");
   const [userLocked, setUserLocked] = createSignal(false);
+  let booted = false;
 
   onMount(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
     if (stored === "light" || stored === "dark") {
       setUserLocked(true);
       setThemeSignal(stored);
-      applyTheme(stored);
+      applyThemeInstant(stored);
     } else {
       const sys = systemTheme();
       setThemeSignal(sys);
-      applyTheme(sys);
+      applyThemeInstant(sys);
     }
+    booted = true;
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
       if (userLocked()) return;
       const next = mq.matches ? "dark" : "light";
       setThemeSignal(next);
-      applyTheme(next);
+      applyThemeAnimated(next);
     };
     mq.addEventListener("change", onChange);
     onCleanup(() => mq.removeEventListener("change", onChange));
-  });
-
-  createEffect(() => {
-    const t = theme();
-    if (typeof document !== "undefined") applyTheme(t);
   });
 
   const setTheme = (t: Theme) => {
     setUserLocked(true);
     localStorage.setItem(STORAGE_KEY, t);
     setThemeSignal(t);
-    applyTheme(t);
+    if (booted) applyThemeAnimated(t);
+    else applyThemeInstant(t);
   };
 
   const toggle = () => setTheme(theme() === "dark" ? "light" : "dark");
