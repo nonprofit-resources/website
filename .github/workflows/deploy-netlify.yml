@@ -99,6 +99,15 @@ jobs:
               });
             }
 
+      - name: Sync runtime secrets to Netlify
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          netlify env:set TURSO_DATABASE_URL "${{ secrets.TURSO_DATABASE_URL }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set TURSO_AUTH_TOKEN "${{ secrets.TURSO_AUTH_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
       - name: Deploy production
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
