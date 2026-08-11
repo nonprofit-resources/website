@@ -132,3 +132,20 @@ body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.prose-adoc ul,
+.prose-adoc ol {
+  margin: 0.65rem 0;
+  padding-left: 1.25rem;
+}
+.prose-adoc li {
+  margin: 0.35rem 0;
+  line-height: 1.6;
+}
+.prose-adoc img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
+}

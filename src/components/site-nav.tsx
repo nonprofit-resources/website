@@ -10,6 +10,7 @@ export function StickyNav() {
     { href: "/", label: t("nav_home") },
     { href: "/services", label: t("nav_services") },
     { href: "/news", label: t("nav_news") },
+    { href: "/guides", label: t("nav_guides") },
     { href: "/blog", label: t("nav_blog") },
     { href: "/submit", label: t("nav_submit") },
   ];

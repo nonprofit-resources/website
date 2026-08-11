@@ -13,6 +13,13 @@ export default function AttributionsPage() {
         <li>Better Auth, Drizzle ORM, libSQL/Turso clients — their respective licenses</li>
         <li>Seed catalog inspired by public nonprofit portals and community awesome-lists</li>
         <li>Service preview images captured from public marketing pages where permitted</li>
+        <li>
+          Analyze Queue screenshot © Transparency HOA — used as a cited example on the transparent
+          fund-ask guide; source{" "}
+          <a class="underline" href="https://www.transparencyhoa.org/analyze-queue">
+            transparencyhoa.org/analyze-queue
+          </a>
+        </li>
       </ul>
     </article>
   );

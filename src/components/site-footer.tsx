@@ -36,6 +36,9 @@ export function SiteFooter() {
             <A href="/news" class={footLink}>
               News
             </A>
+            <A href="/guides" class={footLink}>
+              Guides
+            </A>
             <A href="/blog" class={footLink}>
               Blog
             </A>

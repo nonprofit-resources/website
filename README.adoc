@@ -7,7 +7,7 @@ SolidStart catalog for [nonprofit-resources.org](https://nonprofit-resources.org
 * SolidStart + Tailwind + Kobalte (solid-ui style components)
 * Turso (libSQL) + Drizzle + Better Auth
 * Customer.io (news subscribe) + Resend (transactional)
-* AsciiDoc content under `content/`
+* AsciiDoc content under `content/` (`news`, `blog`, `guides`)
 
 == Develop
 

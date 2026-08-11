@@ -1,5 +1,11 @@
 = Changelog
 
+== 2026-08-11
+
+* Added **Guides** (`content/guides`, `/guides`) for operator docs, starting with *Donate page as a ledger* (Transparency HOA–style fund balance + monthly floor on the donate view).
+* Screenshot of the public Analyze Queue page under `public/media/guides/`.
+* DevCentr Funding ideas page links here instead of duplicating the writeup.
+
 == 2026-08-09
 
 * Catalog filters: full-text search, Absolutely free, bypass gatekeepers, offer/kind/category chips, sort, shareable query params; schema adds `absolutely_free`, `resource_kind`, `intermediary_required`, `tags_json`, `search_blob` (+ indexes).

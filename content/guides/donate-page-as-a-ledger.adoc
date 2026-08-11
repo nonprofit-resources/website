@@ -1,0 +1,49 @@
+= Donate page as a ledger
+:description: Show the operating fund, the monthly floor, and the donate button on the same page — instead of a mission sentence and a hop to a third-party form.
+:revdate: 2026-08-11
+
+Most donation pages hide the books. A visitor sees a mission sentence and a button. They do not see whether last month’s costs are covered, whether the org is sitting on unused cash, or what “enough” even means.
+
+A better ask treats the donate page as a **ledger**: current balance, the minimum required to keep the service running, an as-of date, and the work that money pays for — then the button.
+
+== The pattern (Transparency HOA)
+
+link:https://www.transparencyhoa.org/analyze-queue[Transparency HOA’s Analyze Queue] (a 501(c)(3) founded in 2019) puts the ask on the same page as the work queue.
+
+As captured in 2026, the page states that the Analyze service costs about **$6,000 per month**, shows an **Analysis Fund** balance (**$7,881** as of 30 April 2026), and keeps **Donate Now** on that same view. Below the fund, a pending list names the associations waiting for analysis.
+
+image::/media/guides/transparencyhoa-analyze-queue.png["Transparency HOA Analyze Queue: fund balance, monthly cost, Donate Now, and pending associations"]
+
+Screenshot of the public Analyze Queue page. Used here as a cited example of an on-site fund ask. Source: link:https://www.transparencyhoa.org/analyze-queue[transparencyhoa.org/analyze-queue].
+
+The numbers will change. The design lesson does not: **cost + balance + date + ask + work**, on one page, under the org’s own brand.
+
+== What to put on the page
+
+* **Floor** — the minimum to stay in operation for the period you actually run (monthly burn for a service, quarterly for a slower program). Say what the number includes.
+* **Balance or raised** — cash on hand for that fund, or amount raised toward a campaign. Label which it is.
+* **As-of date** — stale totals destroy trust faster than no totals.
+* **Ask** — donate (or sponsor) in the same view. The payment processor can still be Stripe, Open Collective, or a fiscal host; do not exile the *story* to a blank third-party form.
+* **What the money buys** — a queue, a milestone list, a public budget line. Visitors should see work, not only a thermometer.
+
+A goal amount is useful when you are filling a campaign. A **floor** is more honest when the real question is “can this keep running next month?” You can show both: floor as the line you must not fall under, goal as the next useful surplus.
+
+== Why this beats a generic donate button
+
+* **Trust** — published numbers beat “please support our mission.”
+* **Urgency without theater** — a balance near the floor is a reason to give; a surplus is also honest (the example above was *above* one month of burn).
+* **Ownership** — the ask stays on your site. Hosted fundraisers are fine as the checkout rail, not as the only page a donor ever sees.
+
+This works for 501(c) organizations **and** for donation-supported products or OSS projects. The legal wrapper changes the tax receipt; it does not change the UX.
+
+== What not to fake
+
+* Do not invent a burn rate. If you do not know monthly cost, publish a smaller true number (hosting only) rather than a rounded “we need $X.”
+* Do not hide a large reserve behind a crisis headline.
+* Do not copy another org’s dollar figures into your own page.
+* Tax deductibility, fiscal-host fees, and charitable status are jurisdiction-specific. This guide is a page pattern, not legal or accounting advice.
+
+== Related
+
+* DevCentr funding map (channels: fiscal hosts, grants, sponsorships): link:https://docs.devcentr.org/business-bootstrap/funding/[Business Bootstrap · Funding]
+* Short ideas list (same screenshot, pointer back here): link:https://docs.devcentr.org/business-bootstrap/funding/explanation/donation-ask-ideas.html[Donation and monetization ask ideas]

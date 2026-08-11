@@ -39,3 +39,4 @@ function buildKind(kind) {
 
 buildKind("news");
 buildKind("blog");
+buildKind("guides");

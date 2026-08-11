@@ -2,7 +2,7 @@
 
 ## Facts
 - Org: `nonprofit-resources` · site: SolidStart · primary domain `nonprofit-resources.org`
-- No separate Antora docs; AsciiDoc articles live in `content/`
+- No separate Antora docs; AsciiDoc articles live in `content/` (`news`, `blog`, `guides`)
 - DB: Turso/libSQL + Drizzle; auth: Better Auth; news: Customer.io; tx mail: Resend
 - Related OSS in footer: DevCentr, OpenShellOrg, HCI Nerdz, linx.photos, InstaLay — not FoodTruckNerdz
 
