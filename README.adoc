@@ -1,6 +1,6 @@
 # Nonprofit Resources Website
 
-SolidStart catalog for [nonprofit-resources.org](https://nonprofit-resources.org).
+SolidStart catalog for [nonprofit-resources.org](https://nonprofit-resources.org). See link:CHANGELOG.adoc[CHANGELOG] for what changed.
 
 == Stack
 
@@ -14,6 +14,7 @@ SolidStart catalog for [nonprofit-resources.org](https://nonprofit-resources.org
 [source,bash]
 ----
 pnpm install
+pnpm logo:export
 pnpm media:download
 pnpm content:build
 pnpm dev

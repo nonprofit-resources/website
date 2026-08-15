@@ -11,6 +11,7 @@
     "start": "vinxi start",
     "content:build": "node scripts/build-content.mjs",
     "media:download": "node scripts/download-media.mjs",
+    "logo:export": "node scripts/export-logo-png.mjs",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate"
   },

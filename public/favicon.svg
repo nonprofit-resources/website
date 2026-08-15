@@ -1,5 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="4" y="8" width="56" height="48" rx="10" fill="#2f6b55" fill-opacity="0.15" stroke="#2f6b55" stroke-width="2"/>
-  <path d="M16 40V24h8.5c5 0 8 2.6 8 7s-3 7-8 7H22v2h-6zm6-12v8h2.2c2.8 0 4.3-1.3 4.3-4s-1.5-4-4.3-4H22zM36 40V24h14v5h-8v2.5h7.2v4.5H42V40h-6z" fill="#2f6b55"/>
-  <circle cx="50" cy="16" r="5" fill="#c45c2a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" rx="28" fill="#F4F0E6"/>
+  <!-- heart -->
+  <path
+    fill="#C45C2A"
+    stroke="#EDE9DF"
+    stroke-width="2"
+    stroke-linejoin="round"
+    d="M64 22c-1.6-3.6-7.2-9.4-14-9.4C41.6 12.6 36 18.4 36 25.4c0 11.6 13.2 20.6 28 31.2 14.8-10.6 28-19.6 28-31.2 0-7-5.6-12.8-14-12.8C71.2 12.6 65.6 18.4 64 22z"
+  />
+  <!-- depth: drop shadow under whole hand -->
+  <g opacity="0.35" transform="translate(2.5 3)">
+    <path fill="#0D2A22" d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"/>
+    <rect x="48" y="54" width="10" height="28" rx="5" fill="#0D2A22"/>
+    <rect x="61" y="50" width="10" height="32" rx="5" fill="#0D2A22"/>
+    <rect x="74" y="52" width="10" height="30" rx="5" fill="#0D2A22"/>
+    <rect x="87" y="56" width="10" height="26" rx="5" fill="#0D2A22"/>
+  </g>
+  <!-- palm mid-tone -->
+  <path
+    fill="#245A48"
+    stroke="#F7F4EC"
+    stroke-width="2"
+    stroke-linejoin="round"
+    d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
+  />
+  <!-- palm top highlight band -->
+  <path fill="#3D8A6C" d="M48 74h40v8H48z" opacity="0.55"/>
+  <!-- thumb -->
+  <path
+    fill="#2F6B55"
+    stroke="#F7F4EC"
+    stroke-width="2"
+    stroke-linejoin="round"
+    d="M30 78c0-5 4-9 9-9h5c3.3 0 6 2.7 6 6v16c0 2.8-2.2 5-5 5h-4c-6.1 0-11-4.9-11-11V78z"
+  />
+  <!-- fingers: darker base then lighter face -->
+  <rect x="48" y="54" width="10" height="28" rx="5" fill="#1F4A3A" stroke="#F7F4EC" stroke-width="2"/>
+  <rect x="49" y="55" width="8" height="20" rx="4" fill="#3D8A6C" opacity="0.7"/>
+  <rect x="61" y="50" width="10" height="32" rx="5" fill="#1F4A3A" stroke="#F7F4EC" stroke-width="2"/>
+  <rect x="62" y="51" width="8" height="22" rx="4" fill="#3D8A6C" opacity="0.7"/>
+  <rect x="74" y="52" width="10" height="30" rx="5" fill="#1F4A3A" stroke="#F7F4EC" stroke-width="2"/>
+  <rect x="75" y="53" width="8" height="21" rx="4" fill="#3D8A6C" opacity="0.7"/>
+  <rect x="87" y="56" width="10" height="26" rx="5" fill="#1F4A3A" stroke="#F7F4EC" stroke-width="2"/>
+  <rect x="88" y="57" width="8" height="18" rx="4" fill="#3D8A6C" opacity="0.7"/>
+  <!-- light finger crease lines -->
+  <path stroke="#F7F4EC" stroke-width="1.8" stroke-linecap="round" d="M50.5 64h5M63.5 62h5M76.5 63h5M89.5 65h5"/>
+  <path stroke="#E8E4DA" stroke-width="1.6" stroke-linecap="round" d="M50.5 71h5M63.5 70h5M76.5 70h5M89.5 71h5"/>
+  <!-- palm crease -->
+  <path stroke="#F7F4EC" stroke-width="1.8" stroke-linecap="round" d="M50 80c8 4 22 4 30 0"/>
 </svg>

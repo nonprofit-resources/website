@@ -13,6 +13,7 @@ export default createHandler(() => (
           <meta name="color-scheme" content="light dark" />
           <script>{themeBoot}</script>
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          <link rel="apple-touch-icon" href="/logo-256.png" />
           {assets}
         </head>
         <body>

@@ -7,7 +7,7 @@
 - Related OSS in footer: DevCentr, OpenShellOrg, HCI Nerdz, linx.photos, InstaLay — not FoodTruckNerdz
 
 ## Commands
-- `pnpm dev` / `pnpm build` / `pnpm content:build` / `pnpm media:download`
+- `pnpm dev` / `pnpm build` / `pnpm content:build` / `pnpm media:download` / `pnpm logo:export` (needs sibling `../.github/assets/logo.svg`)
 
 ## Deploy
 - Do **not** link the GitHub org repo in the Netlify UI (team pricing).

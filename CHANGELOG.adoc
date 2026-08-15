@@ -1,5 +1,9 @@
 = Changelog
 
+== 2026-08-15
+
+* Regenerated `public/favicon.svg` from the org giving-hand logo (tab icon was still the old lettermark). `pnpm logo:export` now copies the SVG into the favicon slot whenever logos are exported. Apple touch icon points at `logo-256.png`.
+
 == 2026-08-11
 
 * Added **Guides** (`content/guides`, `/guides`) for operator docs, starting with *Donate page as a ledger* (Transparency HOA–style fund balance + monthly floor on the donate view).
