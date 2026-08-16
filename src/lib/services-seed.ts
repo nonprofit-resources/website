@@ -6,6 +6,7 @@ export type OfferType =
   | "tier_discount"
   | "grant_credit"
   | "freemium_upgrade"
+  | "trial_then_paid"
   | "diy_oss"
   | "meta_directory";
 
@@ -399,6 +400,47 @@ const handServicesSeed: ServiceSeed[] = [
     iconHint: "slack",
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
+  },
+  {
+    id: "nonprofit-crm",
+    slug: "nonprofit-crm",
+    name: "Nonprofit CRM",
+    category: "crm",
+    offerType: "trial_then_paid",
+    resourceKind: "vendor_plan",
+    listingKind: "standalone",
+    summary:
+      "HighLevel-based donor CRM: automations, multi-channel outreach, and fundraising pages. 30-day trial, then paid plans from $97/mo — not a 501(c)(3) discount.",
+    details:
+      "Public site at nonprofit-crm.com (launch recorded 8–10 Aug 2026). The product is GoHighLevel (HighLevel) positioned for charities: donor profiles, tax-receipt and thank-you automations, campaign pages, SMS/email, and volunteer scheduling.\n\nPricing advertised on the homepage (verified 16 Aug 2026): Starter $97/mo (1 location, up to 3 team members), Unlimited $297/mo, Pro/Agency $497/mo. A 30-day trial is offered; SMS/carrier usage is extra. HighLevel does not publish a vendor nonprofit SKU, and this site does not ask for a determination letter — treat it as commercial SaaS, not a Google/Microsoft-style program.\n\nOwner identity was unclaimed on the Website Launches record when listed. Compare against purpose-built nonprofit CRMs (CiviCRM, Salesforce Nonprofit Cloud, Bloomerang) before committing.",
+    absolutelyFree: false,
+    intermediaryRequired: false,
+    userSeatLimit: 3,
+    verification: ["none"],
+    directPortalUrl: "https://nonprofit-crm.com/",
+    alternativeToUrl: "https://alternativeto.net/software/highlevel/",
+    metaResource: false,
+    tags: [
+      "crm",
+      "donors",
+      "fundraising",
+      "highlevel",
+      "gohighlevel",
+      "websitelaunches",
+    ],
+    iconHint: "nonprofit-crm",
+    screenshotUrl: "https://nonprofit-crm.com/",
+    lastVerifiedAt: "2026-08-16",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: false,
+      seatLimit: 3,
+      intermediary: false,
+      verification: "None (public trial / paid signup)",
+      email: true,
+      notes:
+        "HighLevel white-label/affiliate landing. 30-day trial then $97 / $297 / $497 per month; SMS extra. Starter seat cap is 3; higher plans lift it. Not a vendor 501(c)(3) discount.",
+    },
   },
   {
     id: "aws-nonprofits",
@@ -795,6 +837,7 @@ export const OFFER_TYPE_LABELS: Record<OfferType, string> = {
   tier_discount: "Tier discount",
   grant_credit: "Grant / credits",
   freemium_upgrade: "Free upgrade",
+  trial_then_paid: "Trial, then paid",
   diy_oss: "DIY / open source",
   meta_directory: "Meta directory",
 };

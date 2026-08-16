@@ -76,6 +76,20 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
               (CC BY 4.0).
             </p>
           </Show>
+          <Show when={s().tags.includes("websitelaunches")}>
+            <p class="text-xs text-muted-foreground">
+              Launch record:{" "}
+              <a
+                class="underline"
+                href={`https://websitelaunches.com/site/${new URL(s().directPortalUrl).hostname.replace(/^www\./, "")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Website Launches
+              </a>
+              .
+            </p>
+          </Show>
           <Show when={s().tags.length}>
             <div class="flex flex-wrap gap-1.5">
               <For each={s().tags}>

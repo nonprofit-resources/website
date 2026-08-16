@@ -16,6 +16,7 @@ export const DARK_MARK_FOR: Record<string, string> = {
   devcentr: "devcentr-dark",
   github: "github-dark",
   "hci-nerdz": "hci-nerdz-dark",
+  "nonprofit-crm": "nonprofit-crm-dark",
   openshellorg: "openshellorg-dark",
   placeholder: "placeholder-dark",
 };

@@ -57,6 +57,7 @@ export async function writeThemedMarks() {
     ["placeholder", "Nonprofit Resources"],
     ["openshellorg", "OpenShellOrg"],
     ["hci-nerdz", "HCI Nerdz"],
+    ["nonprofit-crm", "Nonprofit CRM"],
   ];
   for (const [id, label] of tiles) {
     await writeMark(id, placeholderSvg(label, false), { width: 256, height: 144 });
