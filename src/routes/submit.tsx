@@ -63,6 +63,7 @@ export default function SubmitPage() {
             <option value="security">Security</option>
             <option value="marketing">Marketing</option>
             <option value="meta_directory">Meta directory</option>
+            <option value="open_source">Open source</option>
             <option value="partner_oss">Partner OSS</option>
           </select>
         </label>

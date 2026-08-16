@@ -3,6 +3,7 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import { BrandBar } from "~/components/brand-bar";
+import { CompareTray } from "~/components/compare-tray";
 import { SiteFooter } from "~/components/site-footer";
 import { StickyNav } from "~/components/site-nav";
 import { I18nProvider } from "~/lib/i18n";
@@ -28,6 +29,7 @@ export default function App() {
                 </main>
                 <SiteFooter />
               </div>
+              <CompareTray />
             </I18nProvider>
           </ThemeProvider>
         </MetaProvider>

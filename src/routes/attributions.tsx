@@ -12,6 +12,16 @@ export default function AttributionsPage() {
         <li>Lucide icons — ISC</li>
         <li>Better Auth, Drizzle ORM, libSQL/Turso clients — their respective licenses</li>
         <li>Seed catalog inspired by public nonprofit portals and community awesome-lists</li>
+        <li>
+          OSS.Fund directory data (CC BY 4.0) —{" "}
+          <a class="underline" href="https://www.oss.fund/" target="_blank" rel="noreferrer">
+            oss.fund
+          </a>
+          ; source{" "}
+          <a class="underline" href="https://github.com/oss-fund/directory" target="_blank" rel="noreferrer">
+            github.com/oss-fund/directory
+          </a>
+        </li>
         <li>Service preview images captured from public marketing pages where permitted</li>
         <li>
           Analyze Queue screenshot © Transparency HOA — used as a cited example on the transparent

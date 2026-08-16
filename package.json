@@ -12,6 +12,7 @@
     "content:build": "node scripts/build-content.mjs",
     "media:download": "node scripts/download-media.mjs",
     "logo:export": "node scripts/export-logo-png.mjs",
+    "catalog:sync-oss-fund": "node scripts/sync-oss-fund.mjs",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate"
   },

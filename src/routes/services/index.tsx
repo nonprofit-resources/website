@@ -55,7 +55,9 @@ export default function ServicesPage() {
       cat: undefined,
       offer: undefined,
       kind: undefined,
+      list: undefined,
       status: undefined,
+      oss: undefined,
       sort: undefined,
     };
     for (const [k, v] of next.entries()) obj[k] = v;
@@ -72,7 +74,7 @@ export default function ServicesPage() {
         <div>
           <h1 class="font-display text-3xl font-semibold">Services</h1>
           <p class="mt-1 text-muted-foreground">
-            Search and filter nonprofit plans, DIY options, free software, and meta-directories.
+            Search and filter nonprofit plans, DIY options, free software, OSS funding, and meta-directories.
           </p>
         </div>
         <div class="inline-flex rounded-md border border-border p-0.5">

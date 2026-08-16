@@ -11,6 +11,7 @@ const dict = {
   en: {
     nav_home: "Home",
     nav_services: "Services",
+    nav_compare: "Compare",
     nav_news: "News",
     nav_guides: "Guides",
     nav_blog: "Blog",
@@ -35,6 +36,7 @@ const dict = {
   es: {
     nav_home: "Inicio",
     nav_services: "Servicios",
+    nav_compare: "Comparar",
     nav_news: "Noticias",
     nav_guides: "Guías",
     nav_blog: "Blog",
@@ -59,6 +61,7 @@ const dict = {
   fr: {
     nav_home: "Accueil",
     nav_services: "Services",
+    nav_compare: "Comparer",
     nav_news: "Actualités",
     nav_guides: "Guides",
     nav_blog: "Blog",

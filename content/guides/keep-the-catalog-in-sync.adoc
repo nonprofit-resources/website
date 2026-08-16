@@ -1,0 +1,72 @@
+= Keep the catalog in sync
+:description: Pull our JSON catalog, or register a webhook, when sibling directories such as OSS.Fund change.
+:revdate: 2026-08-15
+
+Open-source projects are a subset of the orgs this catalog serves. link:https://www.oss.fund/[OSS.Fund] is the sibling directory for OSS funding platforms (Open Collective, GitHub Sponsors, Liberapay, and the rest). They do **not** offer an HTTP API or webhooks. Their public source is Markdown on GitHub (CC BY 4.0): link:https://github.com/oss-fund/directory[oss-fund/directory].
+
+This site therefore:
+
+. Lists OSS.Fund itself as a meta-directory.
+. Imports live OSS-friendly / nonprofit-tagged platforms into the **Open source** category (`pnpm catalog:sync-oss-fund`).
+. Publishes a pull API so they — or anyone — can consume *our* catalog.
+. Offers outbound `catalog.updated` webhooks, plus an inbound GitHub receiver if OSS.Fund (or we) attach a repo webhook later.
+
+== Pull the catalog
+
+JSON feed (CORS enabled, 5-minute cache):
+
+[source,text]
+----
+GET https://nonprofit-resources.org/api/catalog
+----
+
+Each item includes `id`, `slug`, `name`, `href`, `category`, `tags`, `portalUrl`, `openSource`, and verification flags. Filter `items` where `openSource` is true for the OSS subset.
+
+=== Attribution
+
+Imported OSS.Fund rows stay attributed in each listing and on `/attributions`. If you republish those rows, keep the CC BY 4.0 credit to link:https://www.oss.fund/[OSS.Fund].
+
+== Outbound webhooks
+
+Staff (signed-in admin email or `CATALOG_WEBHOOK_ADMIN_TOKEN`) can register a destination:
+
+[source,bash]
+----
+curl -X POST https://nonprofit-resources.org/api/webhooks \
+  -H "Authorization: Bearer $CATALOG_WEBHOOK_ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.org/hooks/nr","note":"oss.fund mirror"}'
+----
+
+The response includes a `secret` once. Every later POST is HMAC-SHA256:
+
+* Header `X-Nonprofit-Resources-Event: catalog.updated`
+* Header `X-Nonprofit-Resources-Signature: sha256=<hex>`
+* JSON body with `catalog` (URL of `/api/catalog`) and `occurredAt`
+
+Production deploys call `/api/webhooks/dispatch` with `CATALOG_WEBHOOK_DISPATCH_SECRET`. Polling `/api/catalog` is enough if you do not want a push.
+
+Private/loopback URLs are rejected.
+
+== Inbound GitHub webhook (OSS.Fund)
+
+If the maintainers of `oss-fund/directory` add a webhook:
+
+* Payload URL: `https://nonprofit-resources.org/api/webhooks/github`
+* Content type: `application/json`
+* Secret: the same value as `OSS_FUND_GITHUB_WEBHOOK_SECRET`
+* Events: Pushes
+
+That ping starts GitHub Actions (`repository_dispatch: oss-fund-sync`), which regenerates `src/lib/oss-fund-seed.generated.ts` and opens a PR. A daily cron does the same when no webhook is attached.
+
+Until they add that hook, we stay in sync by cloning their repo on a schedule.
+
+== Sending listings the other way
+
+OSS.Fund accepts new platforms as a pull request against `posts/` in `oss-fund/directory`. A listing for Nonprofit Resources belongs there as a *directory*, not a funding platform, and should wait on their editorial review. Prefer that they poll `/api/catalog` if they want the full feed.
+
+== Related
+
+* Browse locally: `/services?oss=1`
+* Script: `pnpm catalog:sync-oss-fund`
+* OSS.Fund about page: link:https://www.oss.fund/about/[oss.fund/about]

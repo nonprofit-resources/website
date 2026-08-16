@@ -1,11 +1,17 @@
 import type {
   CategoryId,
+  ListingKind,
   OfferType,
   ResourceKind,
   ServiceSeed,
   StalenessStatus,
 } from "./services-seed";
-import { bypassesGatekeepers, serviceSearchBlob } from "./services-seed";
+import {
+  bypassesGatekeepers,
+  isOpenSourceGeared,
+  listingKindOf,
+  serviceSearchBlob,
+} from "./services-seed";
 
 export type SortKey = "relevance" | "name_asc" | "name_desc" | "verified_desc" | "featured";
 
@@ -15,10 +21,12 @@ export interface CatalogFilterState {
   bypassGatekeepers: boolean;
   noVerification: boolean;
   featuredOnly: boolean;
+  openSource: boolean;
   excludeMeta: boolean;
   categories: CategoryId[];
   offerTypes: OfferType[];
   resourceKinds: ResourceKind[];
+  listingKinds: ListingKind[];
   staleness: StalenessStatus[];
   sort: SortKey;
 }
@@ -29,10 +37,12 @@ export const defaultCatalogFilters = (): CatalogFilterState => ({
   bypassGatekeepers: false,
   noVerification: false,
   featuredOnly: false,
+  openSource: false,
   excludeMeta: false,
   categories: [],
   offerTypes: [],
   resourceKinds: [],
+  listingKinds: [],
   staleness: [],
   sort: "relevance",
 });
@@ -70,10 +80,13 @@ export function applyCatalogFilters(services: ServiceSeed[], filters: CatalogFil
     if (filters.bypassGatekeepers && !bypassesGatekeepers(s)) return false;
     if (filters.noVerification && !s.verification.every((v) => v === "none")) return false;
     if (filters.featuredOnly && !s.featured) return false;
+    if (filters.openSource && !isOpenSourceGeared(s)) return false;
     if (filters.excludeMeta && s.metaResource) return false;
     if (filters.categories.length && !filters.categories.includes(s.category)) return false;
     if (filters.offerTypes.length && !filters.offerTypes.includes(s.offerType)) return false;
     if (filters.resourceKinds.length && !filters.resourceKinds.includes(s.resourceKind))
+      return false;
+    if (filters.listingKinds.length && !filters.listingKinds.includes(listingKindOf(s)))
       return false;
     if (filters.staleness.length && !filters.staleness.includes(s.stalenessStatus)) return false;
     if (tokens.length) {
@@ -114,10 +127,12 @@ export function countActiveFilters(f: CatalogFilterState) {
   if (f.bypassGatekeepers) n++;
   if (f.noVerification) n++;
   if (f.featuredOnly) n++;
+  if (f.openSource) n++;
   if (f.excludeMeta) n++;
   n += f.categories.length;
   n += f.offerTypes.length;
   n += f.resourceKinds.length;
+  n += f.listingKinds.length;
   n += f.staleness.length;
   if (f.sort !== "relevance") n++;
   return n;
@@ -141,10 +156,12 @@ export function filtersFromSearchParams(params: URLSearchParams): CatalogFilterS
   base.bypassGatekeepers = params.get("bypass") === "1";
   base.noVerification = params.get("noverif") === "1";
   base.featuredOnly = params.get("featured") === "1";
+  base.openSource = params.get("oss") === "1";
   base.excludeMeta = params.get("nometa") === "1";
   base.categories = csv("cat") as CategoryId[];
   base.offerTypes = csv("offer") as OfferType[];
   base.resourceKinds = csv("kind") as ResourceKind[];
+  base.listingKinds = csv("list") as ListingKind[];
   base.staleness = csv("status") as StalenessStatus[];
   const sort = params.get("sort") as SortKey | null;
   if (sort) base.sort = sort;
@@ -158,10 +175,12 @@ export function filtersToSearchParams(f: CatalogFilterState): URLSearchParams {
   if (f.bypassGatekeepers) p.set("bypass", "1");
   if (f.noVerification) p.set("noverif", "1");
   if (f.featuredOnly) p.set("featured", "1");
+  if (f.openSource) p.set("oss", "1");
   if (f.excludeMeta) p.set("nometa", "1");
   if (f.categories.length) p.set("cat", f.categories.join(","));
   if (f.offerTypes.length) p.set("offer", f.offerTypes.join(","));
   if (f.resourceKinds.length) p.set("kind", f.resourceKinds.join(","));
+  if (f.listingKinds.length) p.set("list", f.listingKinds.join(","));
   if (f.staleness.length) p.set("status", f.staleness.join(","));
   if (f.sort !== "relevance") p.set("sort", f.sort);
   return p;

@@ -9,6 +9,7 @@ export function StickyNav() {
   const items = () => [
     { href: "/", label: t("nav_home") },
     { href: "/services", label: t("nav_services") },
+    { href: "/compare", label: t("nav_compare") },
     { href: "/news", label: t("nav_news") },
     { href: "/guides", label: t("nav_guides") },
     { href: "/blog", label: t("nav_blog") },

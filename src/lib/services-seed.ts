@@ -1,3 +1,6 @@
+import type { CompareValues } from "./compare-features";
+import { ossFundSeed } from "./oss-fund-seed.generated";
+
 export type OfferType =
   | "100_percent_free"
   | "tier_discount"
@@ -17,6 +20,7 @@ export type CategoryId =
   | "productivity"
   | "security"
   | "marketing"
+  | "open_source"
   | "partner_oss";
 
 export type VerificationReq =
@@ -32,6 +36,11 @@ export type StalenessStatus = "active" | "unverified" | "deprecated";
 /** How the listing fits the catalog taxonomy. */
 export type ResourceKind = "vendor_plan" | "diy_oss" | "meta_directory" | "hardware";
 
+/** Program = vendor umbrella; app = product inside a program; standalone = own listing. */
+export type ListingKind = "program" | "app" | "standalone";
+
+export type { CompareValues };
+
 export interface ServiceSeed {
   id: string;
   slug: string;
@@ -40,6 +49,8 @@ export interface ServiceSeed {
   offerType: OfferType;
   resourceKind: ResourceKind;
   summary: string;
+  /** Longer copy for the entity / app page. */
+  details?: string;
   /** Zero cash outlay for the core nonprofit / OSS offer (after any free eligibility check). */
   absolutelyFree: boolean;
   /** True when TechSoup / Goodstack (or similar) token is required. */
@@ -56,9 +67,14 @@ export interface ServiceSeed {
   screenshotUrl?: string;
   lastVerifiedAt: string;
   stalenessStatus: StalenessStatus;
+  listingKind?: ListingKind;
+  /** Parent program id when this row is a platform app. */
+  parentId?: string;
+  compare?: CompareValues;
 }
 
-export const servicesSeed: ServiceSeed[] = [
+/** Hand-authored first-party listings. OSS.Fund imports are merged after this array. */
+const handServicesSeed: ServiceSeed[] = [
   {
     id: "google-nonprofits",
     slug: "google-for-nonprofits",
@@ -66,8 +82,11 @@ export const servicesSeed: ServiceSeed[] = [
     category: "productivity",
     offerType: "100_percent_free",
     resourceKind: "vendor_plan",
+    listingKind: "program",
     summary:
-      "Google Workspace for Nonprofits ($0/user) and up to $10,000/mo in Google Ad Grants.",
+      "Eligibility portal for Google’s nonprofit product suite. After verification, activate Workspace, Ad Grants, YouTube, and Maps separately.",
+    details:
+      "Google for Nonprofits is the verification gate, not a single app. Eligible orgs in 180+ geographies request an account, then turn on each product from the portal. Individual apps in this catalog have their own limits, activation steps, and comparison rows.",
     absolutelyFree: true,
     intermediaryRequired: false,
     monetaryCapUsd: null,
@@ -77,11 +96,148 @@ export const servicesSeed: ServiceSeed[] = [
     alternativeToUrl: "https://alternativeto.net/software/google-workspace/",
     metaResource: false,
     featured: true,
-    tags: ["workspace", "email", "ad-grants", "google"],
+    tags: ["google", "program", "workspace", "ad-grants", "youtube", "maps"],
     iconHint: "google",
     screenshotUrl: "https://www.google.com/nonprofits/",
-    lastVerifiedAt: "2026-08-09",
+    lastVerifiedAt: "2026-08-15",
     stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      intermediary: false,
+      verification: "501(c)(3) letter",
+      notes: "Activate each product separately after portal approval.",
+    },
+  },
+  {
+    id: "google-workspace-nonprofits",
+    slug: "google-workspace",
+    name: "Google Workspace for Nonprofits",
+    category: "productivity",
+    offerType: "100_percent_free",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "google-nonprofits",
+    summary:
+      "No-cost Workspace for up to 2,000 users: Gmail, Drive, Meet, Calendar, plus Gemini and NotebookLM.",
+    details:
+      "Included with an approved Google for Nonprofits account. The no-cost plan covers collaboration (Gmail, Calendar, Drive, Meet, sites) for up to 2,000 employees or volunteers, with Gemini and NotebookLM listed as core AI services. Discounted Business Standard, Business Plus, and Enterprise editions exist if you outgrow the free SKU. Activate Workspace from the Google for Nonprofits portal — it is a separate switch from Ad Grants or YouTube.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    userSeatLimit: 2000,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.google.com/nonprofits/",
+    alternativeToUrl: "https://alternativeto.net/software/google-workspace/",
+    metaResource: false,
+    tags: ["google", "workspace", "gmail", "drive", "meet", "gemini", "notebooklm"],
+    iconHint: "google-workspace",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      seatLimit: 2000,
+      intermediary: false,
+      verification: "501(c)(3) via Google for Nonprofits",
+      email: true,
+      docs: true,
+      ai: true,
+      notes: "Discounted paid SKUs available; AI & Productivity 1:1 help is a separate add-on program.",
+    },
+  },
+  {
+    id: "google-ad-grants",
+    slug: "google-ad-grants",
+    name: "Google Ad Grants",
+    category: "marketing",
+    offerType: "grant_credit",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "google-nonprofits",
+    summary: "Up to $10,000 USD per month in in-kind Search ads; Performance Max can place ads on Google Maps.",
+    details:
+      "Ad Grants is in-kind advertising credit, not cash. After Google for Nonprofits verification, activate Ad Grants separately and maintain policy-compliant campaigns. Text ads run on Google Search; Performance Max campaigns can also appear on eligible Maps placements. This is independent of Workspace — you can use ads without moving email to Google.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    monetaryCapUsd: 10000,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.google.com/nonprofits/",
+    alternativeToUrl: "https://alternativeto.net/software/google-ads/",
+    metaResource: false,
+    tags: ["google", "ads", "ad-grants", "search", "maps"],
+    iconHint: "google-ad-grants",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      monetaryCapUsd: 10000,
+      intermediary: false,
+      verification: "501(c)(3) via Google for Nonprofits",
+      ads: true,
+      maps: true,
+      notes: "In-kind Search inventory ($10k/mo). Must stay within Ad Grants policies.",
+    },
+  },
+  {
+    id: "youtube-nonprofit",
+    slug: "youtube-nonprofit-program",
+    name: "YouTube Nonprofit Program",
+    category: "marketing",
+    offerType: "100_percent_free",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "google-nonprofits",
+    summary: "YouTube features for fundraising and storytelling after Google for Nonprofits verification.",
+    details:
+      "The YouTube Nonprofit Program is activated from the Google for Nonprofits portal, separately from Workspace and Ad Grants. It is aimed at connecting with supporters through video (donate features and cause storytelling on the YouTube platform). Confirm current donate-on-YouTube availability for your country when you activate.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.google.com/nonprofits/",
+    alternativeToUrl: "https://alternativeto.net/software/youtube/",
+    metaResource: false,
+    tags: ["google", "youtube", "video", "fundraising"],
+    iconHint: "youtube",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      intermediary: false,
+      verification: "501(c)(3) via Google for Nonprofits",
+      video: true,
+      notes: "Activate in the Google for Nonprofits product list; country donate features vary.",
+    },
+  },
+  {
+    id: "google-maps-platform-nonprofits",
+    slug: "google-maps-platform",
+    name: "Google Maps Platform credits",
+    category: "cloud_hosting",
+    offerType: "grant_credit",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "google-nonprofits",
+    summary: "Monthly Maps Platform credits for mapping, places, and location visualizations.",
+    details:
+      "Maps Platform credits are another separate activation on a Google for Nonprofits account. Use them for community maps, program locators, and impact visualizations rather than consumer Google Maps. Credit amounts are set by Google and can change — treat the listed cap as last-verified, not a contract.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    monetaryCapUsd: 250,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.google.com/nonprofits/",
+    alternativeToUrl: "https://alternativeto.net/software/google-maps/",
+    metaResource: false,
+    tags: ["google", "maps", "credits", "location"],
+    iconHint: "google-maps",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      monetaryCapUsd: 250,
+      intermediary: false,
+      verification: "501(c)(3) via Google for Nonprofits",
+      maps: true,
+      cloud: true,
+      notes: "$250/mo last verified; confirm current credit in the Maps Platform console.",
+    },
   },
   {
     id: "microsoft-nonprofits",
@@ -90,8 +246,11 @@ export const servicesSeed: ServiceSeed[] = [
     category: "productivity",
     offerType: "grant_credit",
     resourceKind: "vendor_plan",
+    listingKind: "program",
     summary:
-      "Microsoft 365 Business Premium (up to 10 free seats) and about $2,000 annual Azure credits.",
+      "Microsoft’s nonprofit eligibility hub for Microsoft 365, Azure credits, and related product grants.",
+    details:
+      "Microsoft for Nonprofits is the program umbrella. Individual products (Microsoft 365 seats, Azure credits) have their own caps and often require a TechSoup validation token in addition to 501(c)(3) proof. GitHub for Nonprofits is listed separately in this catalog.",
     absolutelyFree: true,
     intermediaryRequired: true,
     monetaryCapUsd: 2000,
@@ -101,10 +260,81 @@ export const servicesSeed: ServiceSeed[] = [
     alternativeToUrl: "https://alternativeto.net/software/microsoft-365/",
     metaResource: false,
     featured: true,
-    tags: ["m365", "azure", "office", "microsoft"],
+    tags: ["microsoft", "program", "m365", "azure"],
     iconHint: "microsoft",
-    lastVerifiedAt: "2026-08-09",
+    lastVerifiedAt: "2026-08-15",
     stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      intermediary: true,
+      verification: "501(c)(3) + TechSoup token",
+      notes: "Products below are activated individually after eligibility.",
+    },
+  },
+  {
+    id: "microsoft-365-nonprofits",
+    slug: "microsoft-365",
+    name: "Microsoft 365 Business Premium (nonprofit)",
+    category: "productivity",
+    offerType: "100_percent_free",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "microsoft-nonprofits",
+    summary: "Up to 10 no-cost Business Premium seats for eligible nonprofits (TechSoup token).",
+    details:
+      "The headline Microsoft 365 grant is a small number of Business Premium seats (commonly 10), not unlimited tenant-wide licenses. Additional seats are discounted rather than free. Eligibility typically goes through Microsoft for Nonprofits plus a TechSoup (or equivalent) token. This is the email/docs/desktop suite counterpart to Google Workspace.",
+    absolutelyFree: true,
+    intermediaryRequired: true,
+    userSeatLimit: 10,
+    verification: ["501c3_letter", "techsoup_token"],
+    directPortalUrl: "https://nonprofit.microsoft.com/",
+    alternativeToUrl: "https://alternativeto.net/software/microsoft-365/",
+    metaResource: false,
+    tags: ["microsoft", "m365", "office", "email", "teams"],
+    iconHint: "microsoft-365",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      seatLimit: 10,
+      intermediary: true,
+      verification: "501(c)(3) + TechSoup",
+      email: true,
+      docs: true,
+      notes: "Further seats are discounted, not unlimited free.",
+    },
+  },
+  {
+    id: "microsoft-azure-credits",
+    slug: "microsoft-azure-credits",
+    name: "Azure credits for nonprofits",
+    category: "cloud_hosting",
+    offerType: "grant_credit",
+    resourceKind: "vendor_plan",
+    listingKind: "app",
+    parentId: "microsoft-nonprofits",
+    summary: "About $2,000 annual Azure credits for eligible nonprofits after Microsoft eligibility.",
+    details:
+      "Azure nonprofit credits are a separate product from Microsoft 365 seats. The commonly cited grant is about $2,000 USD per year — confirm the current amount in the Microsoft nonprofit portal because credit SKUs change. Use this row when comparing cloud compute grants (versus AWS or Google Cloud offers).",
+    absolutelyFree: true,
+    intermediaryRequired: true,
+    monetaryCapUsd: 2000,
+    verification: ["501c3_letter", "techsoup_token"],
+    directPortalUrl: "https://nonprofit.microsoft.com/",
+    alternativeToUrl: "https://alternativeto.net/software/windows-azure/",
+    metaResource: false,
+    tags: ["microsoft", "azure", "cloud", "credits"],
+    iconHint: "microsoft-azure",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+    compare: {
+      freeCore: true,
+      monetaryCapUsd: 2000,
+      intermediary: true,
+      verification: "501(c)(3) + TechSoup",
+      cloud: true,
+      notes: "Annual credit, not unlimited Azure. Confirm current SKU in the portal.",
+    },
   },
   {
     id: "github-nonprofits",
@@ -296,7 +526,7 @@ export const servicesSeed: ServiceSeed[] = [
     directPortalUrl: "https://alternativeto.net/",
     metaResource: true,
     featured: true,
-    tags: ["alternatives", "foss", "directory"],
+    tags: ["alternatives", "foss", "directory", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
@@ -335,6 +565,28 @@ export const servicesSeed: ServiceSeed[] = [
     stalenessStatus: "active",
   },
   {
+    id: "oss-fund",
+    slug: "oss-fund",
+    name: "OSS.Fund",
+    category: "meta_directory",
+    offerType: "meta_directory",
+    resourceKind: "meta_directory",
+    summary:
+      "Open Source Sustainability Directory — a catalog of current OSS funding platforms such as Open Collective.",
+    details:
+      "Independent, editorially reviewed directory of funding, revenue, and support options for open source maintainers and contributors. Source data is public on GitHub under CC BY 4.0. Open-source projects are a subset of nonprofit-style public-goods work, so this listing is a sibling meta-directory: we import overlapping live platforms into the Open source category, and other catalogs can pull ours from /api/catalog.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    verification: ["none"],
+    directPortalUrl: "https://www.oss.fund/",
+    metaResource: true,
+    featured: true,
+    tags: ["oss.fund", "directory", "funding", "oss-project", "open-collective"],
+    iconHint: "oss-fund",
+    lastVerifiedAt: "2026-08-15",
+    stalenessStatus: "active",
+  },
+  {
     id: "devcentr",
     slug: "devcentr",
     name: "DevCentr",
@@ -348,7 +600,7 @@ export const servicesSeed: ServiceSeed[] = [
     directPortalUrl: "https://devcentr.org/",
     metaResource: false,
     featured: true,
-    tags: ["oss", "devtools", "docs"],
+    tags: ["oss", "devtools", "docs", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
@@ -365,7 +617,7 @@ export const servicesSeed: ServiceSeed[] = [
     verification: ["none"],
     directPortalUrl: "https://openshellorg.github.io/",
     metaResource: false,
-    tags: ["oss", "systems"],
+    tags: ["oss", "systems", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
@@ -382,7 +634,7 @@ export const servicesSeed: ServiceSeed[] = [
     verification: ["none"],
     directPortalUrl: "https://linx.photos/",
     metaResource: false,
-    tags: ["oss", "photos", "media"],
+    tags: ["oss", "photos", "media", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
@@ -399,7 +651,7 @@ export const servicesSeed: ServiceSeed[] = [
     verification: ["none"],
     directPortalUrl: "https://github.com/LinxPhotos/InstaLay",
     metaResource: false,
-    tags: ["oss", "layout"],
+    tags: ["oss", "layout", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
@@ -416,14 +668,94 @@ export const servicesSeed: ServiceSeed[] = [
     verification: ["none"],
     directPortalUrl: "https://hci-nerdz.github.io/",
     metaResource: false,
-    tags: ["oss", "hci", "docs"],
+    tags: ["oss", "hci", "docs", "oss-project"],
     lastVerifiedAt: "2026-08-09",
     stalenessStatus: "active",
   },
 ];
 
+function normalizePortal(url: string) {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "").toLowerCase();
+    const path = u.pathname.replace(/\/+$/, "") || "";
+    return `${host}${path}`;
+  } catch {
+    return url.toLowerCase().replace(/\/+$/, "");
+  }
+}
+
+export function isOpenSourceGeared(s: ServiceSeed) {
+  return s.category === "open_source" || s.tags.includes("oss-project");
+}
+
+function mergeImported(hand: ServiceSeed[], imported: ServiceSeed[]) {
+  const slugs = new Set(hand.map((s) => s.slug));
+  const urls = new Set(hand.map((s) => normalizePortal(s.directPortalUrl)));
+  return [
+    ...hand,
+    ...imported.filter(
+      (s) => !slugs.has(s.slug) && !urls.has(normalizePortal(s.directPortalUrl)),
+    ),
+  ];
+}
+
+export const servicesSeed: ServiceSeed[] = mergeImported(handServicesSeed, ossFundSeed);
+
 export function getServiceBySlug(slug: string) {
   return servicesSeed.find((s) => s.slug === slug);
+}
+
+export function getServiceById(id: string) {
+  return servicesSeed.find((s) => s.id === id);
+}
+
+export function listingKindOf(s: ServiceSeed): ListingKind {
+  return s.listingKind ?? "standalone";
+}
+
+export function parentOf(s: ServiceSeed) {
+  return s.parentId ? getServiceById(s.parentId) : undefined;
+}
+
+export function childrenOf(id: string) {
+  return servicesSeed.filter((s) => s.parentId === id);
+}
+
+export function serviceHref(s: ServiceSeed) {
+  const parent = parentOf(s);
+  if (parent) return `/services/${parent.slug}/${s.slug}`;
+  return `/services/${s.slug}`;
+}
+
+export function pathParts(raw: string | string[] | undefined) {
+  if (raw == null) return [];
+  const joined = Array.isArray(raw) ? raw.join("/") : raw;
+  return joined.split("/").filter(Boolean);
+}
+
+/** One segment = program/standalone (or barcode an app slug). Two = program/app. */
+export function resolveServicePath(parts: string[]): {
+  parent?: ServiceSeed;
+  service?: ServiceSeed;
+  canonical?: string;
+} {
+  if (parts.length === 1) {
+    const service = getServiceBySlug(parts[0]);
+    if (!service) return {};
+    const parent = parentOf(service);
+    return {
+      service,
+      parent,
+      canonical: parent ? serviceHref(service) : `/services/${service.slug}`,
+    };
+  }
+  if (parts.length === 2) {
+    const parent = getServiceBySlug(parts[0]);
+    const service = servicesSeed.find((s) => s.slug === parts[1] && s.parentId === parent?.id);
+    return { parent, service, canonical: service ? serviceHref(service) : undefined };
+  }
+  return {};
 }
 
 export function bypassesGatekeepers(s: ServiceSeed) {
@@ -431,9 +763,31 @@ export function bypassesGatekeepers(s: ServiceSeed) {
 }
 
 export function serviceSearchBlob(s: ServiceSeed) {
-  return [s.name, s.summary, s.category, s.offerType, s.resourceKind, ...s.tags]
+  const parent = parentOf(s);
+  return [
+    s.name,
+    s.summary,
+    s.details ?? "",
+    s.category,
+    s.offerType,
+    s.resourceKind,
+    listingKindOf(s),
+    parent?.name ?? "",
+    ...s.tags,
+  ]
     .join(" ")
     .toLowerCase();
+}
+
+export function compareValuesOf(s: ServiceSeed): CompareValues {
+  return {
+    freeCore: s.absolutelyFree,
+    seatLimit: s.userSeatLimit ?? null,
+    monetaryCapUsd: s.monetaryCapUsd ?? null,
+    intermediary: s.intermediaryRequired,
+    verification: s.verification.join(", "),
+    ...s.compare,
+  };
 }
 
 export const OFFER_TYPE_LABELS: Record<OfferType, string> = {
@@ -452,6 +806,12 @@ export const RESOURCE_KIND_LABELS: Record<ResourceKind, string> = {
   hardware: "Hardware",
 };
 
+export const LISTING_KIND_LABELS: Record<ListingKind, string> = {
+  program: "Program",
+  app: "Platform app",
+  standalone: "Standalone",
+};
+
 export const CATEGORY_LABELS: Record<CategoryId, string> = {
   cloud_hosting: "Cloud hosting",
   crm: "CRM",
@@ -463,5 +823,6 @@ export const CATEGORY_LABELS: Record<CategoryId, string> = {
   productivity: "Productivity",
   security: "Security",
   marketing: "Marketing",
+  open_source: "Open source",
   partner_oss: "Partner OSS",
 };

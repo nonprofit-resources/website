@@ -10,10 +10,13 @@ import {
 } from "~/lib/catalog-filters";
 import {
   CATEGORY_LABELS,
+  LISTING_KIND_LABELS,
   OFFER_TYPE_LABELS,
   RESOURCE_KIND_LABELS,
+  isOpenSourceGeared,
   servicesSeed,
   type CategoryId,
+  type ListingKind,
   type OfferType,
   type ResourceKind,
   type StalenessStatus,
@@ -23,6 +26,7 @@ import { cn } from "~/lib/utils";
 const ALL_CATEGORIES = Object.keys(CATEGORY_LABELS) as CategoryId[];
 const ALL_OFFERS = Object.keys(OFFER_TYPE_LABELS) as OfferType[];
 const ALL_KINDS = Object.keys(RESOURCE_KIND_LABELS) as ResourceKind[];
+const ALL_LISTING = Object.keys(LISTING_KIND_LABELS) as ListingKind[];
 const ALL_STATUS: StalenessStatus[] = ["active", "unverified", "deprecated"];
 
 const chip =
@@ -42,6 +46,7 @@ export function CatalogFilterPanel(props: {
     props.setFilters((prev) => ({ ...prev, ...partial }));
 
   const freeCount = () => servicesSeed.filter((s) => s.absolutelyFree).length;
+  const ossCount = () => servicesSeed.filter((s) => isOpenSourceGeared(s)).length;
 
   return (
     <section class="space-y-4 rounded-xl border border-border bg-card/70 p-4 sm:p-5" aria-label="Catalog filters">
@@ -110,12 +115,38 @@ export function CatalogFilterPanel(props: {
         </button>
         <button
           type="button"
+          class={cn(chip, f().openSource ? chipOn : chipOff)}
+          aria-pressed={f().openSource}
+          onClick={() => patch({ openSource: !f().openSource })}
+        >
+          For open-source projects
+          <span class="rounded bg-background/60 px-1.5 py-0.5 text-[10px] tabular-nums">
+            {ossCount()}
+          </span>
+        </button>
+        <button
+          type="button"
           class={cn(chip, f().excludeMeta ? chipOn : chipOff)}
           aria-pressed={f().excludeMeta}
           onClick={() => patch({ excludeMeta: !f().excludeMeta })}
         >
           Hide meta-directories
         </button>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <For each={ALL_LISTING}>
+          {(k) => (
+            <button
+              type="button"
+              class={cn(chip, f().listingKinds.includes(k) ? chipOn : chipOff)}
+              aria-pressed={f().listingKinds.includes(k)}
+              onClick={() => patch({ listingKinds: toggleInList(f().listingKinds, k) })}
+            >
+              {LISTING_KIND_LABELS[k]}
+            </button>
+          )}
+        </For>
       </div>
 
       <details class="group rounded-lg border border-border/80 bg-background/40 open:bg-background/60">

@@ -27,11 +27,18 @@ const targets = [
   { id: "alternativeto", url: "https://alternativeto.net/favicon.ico" },
   { id: "whole-whale", url: "https://www.wholewhale.com/favicon.ico" },
   { id: "nonprofit-tech-for-good", url: "https://www.nptechforgood.com/favicon.ico" },
+  { id: "oss-fund", url: "https://www.oss.fund/favicon.ico" },
   { id: "devcentr", url: "https://devcentr.org/favicon.ico" },
   { id: "openshellorg", url: "https://openshellorg.github.io/favicon.ico" },
   { id: "linx-photos", url: "https://linx.photos/favicon.ico" },
   { id: "instalay", url: "https://github.githubassets.com/favicons/favicon.png" },
   { id: "hci-nerdz", url: "https://hci-nerdz.github.io/favicon.ico" },
+  { id: "google-workspace", url: "https://workspace.google.com/favicon.ico" },
+  { id: "google-ad-grants", url: "https://ads.google.com/favicon.ico" },
+  { id: "youtube", url: "https://www.youtube.com/favicon.ico" },
+  { id: "google-maps", url: "https://maps.gstatic.com/favicon.ico" },
+  { id: "microsoft-365", url: "https://www.microsoft365.com/favicon.ico" },
+  { id: "microsoft-azure", url: "https://azure.microsoft.com/favicon.ico" },
 ];
 
 function placeholderSvg(label) {

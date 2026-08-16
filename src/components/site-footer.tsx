@@ -45,6 +45,21 @@ export function SiteFooter() {
             <A href="/submit" class={footLink}>
               Submit
             </A>
+            <A href="/compare" class={footLink}>
+              Compare
+            </A>
+            <A href="/services?oss=1" class={footLink}>
+              Open source
+            </A>
+            <a href="https://www.oss.fund/" class={footLink} target="_blank" rel="noreferrer">
+              OSS.Fund
+            </a>
+            <a href="/api/catalog" class={footLink}>
+              Catalog API
+            </a>
+            <A href="/account" class={footLink}>
+              Account
+            </A>
           </nav>
           <nav class="flex flex-col gap-2" aria-label={t("footer_legal")}>
             <span class="text-muted-foreground/70">{t("footer_legal")}</span>

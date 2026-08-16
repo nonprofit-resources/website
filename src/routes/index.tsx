@@ -9,7 +9,7 @@ import { SITE_NAME } from "~/lib/utils";
 
 export default function Home() {
   const { t } = useI18n();
-  const featured = servicesSeed.filter((s) => s.featured);
+  const featured = servicesSeed.filter((s) => s.featured && s.listingKind !== "app");
   return (
     <div class="space-y-10">
       <Title>{SITE_NAME}</Title>
@@ -34,6 +34,11 @@ export default function Home() {
             <A href="/services?free=1">
               <Button size="lg" variant="secondary">
                 Absolutely free only
+              </Button>
+            </A>
+            <A href="/services?oss=1">
+              <Button size="lg" variant="outline">
+                Open-source projects
               </Button>
             </A>
             <A href="/submit">
