@@ -18,7 +18,10 @@ export function SiteFooter() {
             <span class="font-display text-sm font-semibold tracking-tight">{SITE_NAME}</span>
           </div>
           <p class="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-            Cataloguing nonprofit plans, DIY options, and free software. Operated by Ryan Johnson
+            Cataloguing nonprofit plans, DIY options, and free software. Operated by{" "}
+            <a class={footLink} href="https://ryanjohnson.dev" target="_blank" rel="noreferrer">
+              Ryan Johnson
+            </a>{" "}
             (AMDphreak) pending a formal nonprofit entity.
           </p>
           <p class="mt-2 text-sm">
