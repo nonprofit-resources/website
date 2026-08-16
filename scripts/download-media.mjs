@@ -2,11 +2,10 @@
  * Download OG/screenshot-ish previews for catalogued services.
  * Uses public URLs; falls back to generated placeholder SVG if fetch fails.
  */
-import { createWriteStream, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { pipeline } from "node:stream/promises";
-import { Readable } from "node:stream";
+import { writeThemedMarks } from "./write-themed-marks.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "public", "media", "services");
@@ -41,17 +40,20 @@ const targets = [
   { id: "microsoft-azure", url: "https://azure.microsoft.com/favicon.ico" },
 ];
 
-function placeholderSvg(label) {
+function placeholderSvg(label, dark = false) {
+  const gid = `g-${String(label).replace(/[^a-z0-9]+/gi, "-")}-${dark ? "dark" : "light"}`;
+  const bg = dark ? "#1c3329" : "#f7f3ea";
+  const fg = dark ? "#f7f3ea" : "#1c3329";
   return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#2f6b55"/>
       <stop offset="100%" stop-color="#c45c2a"/>
     </linearGradient>
   </defs>
-  <rect width="640" height="360" fill="#f7f3ea"/>
-  <rect x="24" y="24" width="592" height="312" rx="16" fill="url(#g)" opacity="0.18"/>
-  <text x="320" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1c3329">${label}</text>
+  <rect width="640" height="360" fill="${bg}"/>
+  <rect x="24" y="24" width="592" height="312" rx="16" fill="url(#${gid})" opacity="${dark ? "0.35" : "0.18"}"/>
+  <text x="320" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="${fg}">${label}</text>
 </svg>`;
 }
 
@@ -91,4 +93,5 @@ async function downloadOne({ id, url }) {
 for (const t of targets) {
   await downloadOne(t);
 }
+await writeThemedMarks();
 console.log("Media download complete →", outDir);

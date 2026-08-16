@@ -11,6 +11,7 @@
     "start": "vinxi start",
     "content:build": "node scripts/build-content.mjs",
     "media:download": "node scripts/download-media.mjs",
+    "media:marks": "node scripts/write-themed-marks.mjs",
     "logo:export": "node scripts/export-logo-png.mjs",
     "catalog:sync-oss-fund": "node scripts/sync-oss-fund.mjs",
     "db:push": "drizzle-kit push",

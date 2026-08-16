@@ -16,6 +16,7 @@ SolidStart catalog for [nonprofit-resources.org](https://nonprofit-resources.org
 pnpm install
 pnpm logo:export
 pnpm media:download
+pnpm media:marks
 pnpm content:build
 pnpm dev
 ----

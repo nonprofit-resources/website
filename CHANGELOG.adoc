@@ -1,5 +1,9 @@
 = Changelog
 
+== 2026-08-16
+
+* Catalog marks swap for the site theme (`html.dark`): white GitHub invertocat, white AWS smile, and cream-on-forest tiles for partner placeholders. Colorful vendor marks are unchanged. Header octocat follows the same white-on-dark treatment.
+
 == 2026-08-15
 
 * OSS.Fund listed as a featured meta-directory; live OSS-friendly / nonprofit-tagged platforms imported from `oss-fund/directory` (CC BY 4.0) into a new **Open source** category and “For open-source projects” filter (`?oss=1`).

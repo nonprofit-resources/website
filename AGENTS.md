@@ -8,7 +8,7 @@
 - Related OSS in footer: DevCentr, OpenShellOrg, HCI Nerdz, linx.photos, InstaLay — not FoodTruckNerdz
 
 ## Commands
-- `pnpm dev` / `pnpm build` / `pnpm content:build` / `pnpm media:download` / `pnpm logo:export` (needs sibling `../.github/assets/logo.svg`; writes tiled logo, `logo-only` mark, and a tighter tiled favicon)
+- `pnpm dev` / `pnpm build` / `pnpm content:build` / `pnpm media:download` / `pnpm media:marks` (GitHub invertocat, AWS smile, partner placeholder light/dark pairs) / `pnpm logo:export` (needs sibling `../.github/assets/logo.svg`; writes tiled logo, `logo-only` mark, and a tighter tiled favicon)
 - `pnpm catalog:sync-oss-fund` — regenerate OSS.Fund import from `oss-fund/directory`
 
 ## Deploy

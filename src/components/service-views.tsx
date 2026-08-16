@@ -2,6 +2,7 @@ import { A } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { isInCompare, toggleCompare } from "~/lib/compare-cart";
+import { darkMarkHint, resolvedMarkHint } from "~/lib/service-marks";
 import {
   CATEGORY_LABELS,
   LISTING_KIND_LABELS,
@@ -17,11 +18,15 @@ export function mediaSrc(hint: string, ext: "png" | "svg" | "ico" = "png") {
   return `/media/services/${hint}.${ext}`;
 }
 
-function markFallback(el: HTMLImageElement, hint: string, letter: string) {
+function prefersSvg(hint: string) {
+  return Boolean(darkMarkHint(hint)) || hint.endsWith("-dark");
+}
+
+function markFallback(el: HTMLImageElement, hint: string, letter: string, started: "png" | "svg") {
   const parent = el.parentElement;
   if (!el.dataset.fallback) {
     el.dataset.fallback = "1";
-    el.src = mediaSrc(hint, "svg");
+    el.src = mediaSrc(hint, started === "svg" ? "png" : "svg");
     return;
   }
   if (el.dataset.fallback === "1") {
@@ -36,6 +41,37 @@ function markFallback(el: HTMLImageElement, hint: string, letter: string) {
   }
 }
 
+function ServiceMarkImg(props: { hint: string; letter: string; class?: string }) {
+  const hint = () => resolvedMarkHint(props.hint);
+  const dark = () => darkMarkHint(props.hint);
+  const lightExt = () => (prefersSvg(props.hint) ? "svg" : "png") as "png" | "svg";
+  const darkExt = () => "svg" as const;
+  return (
+    <>
+      <img
+        src={mediaSrc(hint(), lightExt())}
+        alt=""
+        class={cn(props.class, dark() && "dark:hidden")}
+        onError={(e) =>
+          markFallback(e.currentTarget as HTMLImageElement, hint(), props.letter, lightExt())
+        }
+      />
+      <Show when={dark()}>
+        {(d) => (
+          <img
+            src={mediaSrc(d(), darkExt())}
+            alt=""
+            class={cn(props.class, "hidden dark:block")}
+            onError={(e) =>
+              markFallback(e.currentTarget as HTMLImageElement, d(), props.letter, darkExt())
+            }
+          />
+        )}
+      </Show>
+    </>
+  );
+}
+
 export function ServiceIcon(props: { name: string; hint?: string; class?: string }) {
   const letter = () => (props.name[0] ?? "?").toUpperCase();
   const hint = () => props.hint ?? "placeholder";
@@ -46,12 +82,7 @@ export function ServiceIcon(props: { name: string; hint?: string; class?: string
         props.class,
       )}
     >
-      <img
-        src={mediaSrc(hint())}
-        alt=""
-        class="size-8 object-contain"
-        onError={(e) => markFallback(e.currentTarget as HTMLImageElement, hint(), letter())}
-      />
+      <ServiceMarkImg hint={hint()} letter={letter()} class="size-8 object-contain" />
     </div>
   );
 }
@@ -73,20 +104,10 @@ export function PlatformAppMark(props: { service: ServiceSeed; class?: string })
         title={`${props.service.name} on ${parent()?.name}`}
       >
         <div class="absolute top-0 left-0 z-0 flex size-7 items-center justify-center rounded-md border border-background bg-card shadow-sm">
-          <img
-            src={mediaSrc(platHint())}
-            alt=""
-            class="size-5 object-contain"
-            onError={(e) => markFallback(e.currentTarget as HTMLImageElement, platHint(), "P")}
-          />
+          <ServiceMarkImg hint={platHint()} letter="P" class="size-5 object-contain" />
         </div>
         <div class="absolute right-0 bottom-0 z-10 flex size-9 items-center justify-center rounded-lg border border-background bg-primary/12 font-display text-sm font-bold text-primary shadow-sm">
-          <img
-            src={mediaSrc(appHint())}
-            alt=""
-            class="size-6 object-contain"
-            onError={(e) => markFallback(e.currentTarget as HTMLImageElement, appHint(), letter())}
-          />
+          <ServiceMarkImg hint={appHint()} letter={letter()} class="size-6 object-contain" />
         </div>
       </div>
     </Show>
