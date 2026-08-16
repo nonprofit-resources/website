@@ -1,5 +1,6 @@
 import { For, Show } from "solid-js";
 import type { Accessor, Setter } from "solid-js";
+import { Check } from "lucide-solid";
 import { Button } from "~/components/ui/button";
 import {
   applyCatalogFilters,
@@ -77,18 +78,32 @@ export function CatalogFilterPanel(props: {
         </label>
       </div>
 
-      <div class="flex flex-wrap gap-2">
-        <button
-          type="button"
-          class={cn(chip, f().absolutelyFree ? chipOn : chipOff, "border-accent/40")}
-          aria-pressed={f().absolutelyFree}
-          onClick={() => patch({ absolutelyFree: !f().absolutelyFree })}
+      <button
+        type="button"
+        role="checkbox"
+        aria-checked={f().absolutelyFree}
+        class="flex cursor-pointer items-center gap-2.5 self-start rounded-lg border border-border bg-background/60 px-3 py-2 text-sm text-left hover:bg-muted/40"
+        onClick={() => patch({ absolutelyFree: !f().absolutelyFree })}
+      >
+        <span
+          class={cn(
+            "flex size-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
+            f().absolutelyFree
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-input bg-background",
+          )}
         >
-          Absolutely free
-          <span class="rounded bg-background/60 px-1.5 py-0.5 text-[10px] tabular-nums">
-            {freeCount()}
-          </span>
-        </button>
+          <Show when={f().absolutelyFree}>
+            <Check class="size-3" stroke-width={3} />
+          </Show>
+        </span>
+        <span class="font-medium">Absolutely free</span>
+        <span class="rounded bg-muted px-1.5 py-0.5 text-[10px] tabular-nums text-muted-foreground">
+          {freeCount()}
+        </span>
+      </button>
+
+      <div class="flex flex-wrap gap-2">
         <button
           type="button"
           class={cn(chip, f().bypassGatekeepers ? chipOn : chipOff)}

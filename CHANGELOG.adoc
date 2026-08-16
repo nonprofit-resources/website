@@ -6,6 +6,7 @@
 * Account links send signed-out visitors to the sign-in page, then back to `/account` after they authenticate.
 * Compare adds a searchable picker so you can grow an n-column table without leaving the page. After the first offering, new columns stay in that category and listing type (programs vs apps).
 * Footer “Ryan Johnson” points at ryanjohnson.dev.
+* Primary nav only highlights the current section (Compare no longer stays selected on every page). Catalog “Absolutely free” is a checkbox row above the chips, not an orange-bordered chip.
 
 == 2026-08-15
 
