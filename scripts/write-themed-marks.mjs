@@ -1,6 +1,6 @@
 /**
  * Catalog marks that need a light/dark pair.
- * GitHub invertocat + AWS smile + cream-tile partner placeholders.
+ * GitHub invertocat + AWS smile + DevCentr orbital mark + cream-tile partner placeholders.
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -55,7 +55,6 @@ export async function writeThemedMarks() {
 
   const tiles = [
     ["placeholder", "Nonprofit Resources"],
-    ["devcentr", "DevCentr"],
     ["openshellorg", "OpenShellOrg"],
     ["hci-nerdz", "HCI Nerdz"],
   ];
@@ -63,6 +62,11 @@ export async function writeThemedMarks() {
     await writeMark(id, placeholderSvg(label, false), { width: 256, height: 144 });
     await writeMark(`${id}-dark`, placeholderSvg(label, true), { width: 256, height: 144 });
   }
+
+  const dcLight = readFileSync(join(scriptsDir, "marks", "devcentr.svg"), "utf8");
+  const dcDark = readFileSync(join(scriptsDir, "marks", "devcentr-dark.svg"), "utf8");
+  await writeMark("devcentr", dcLight);
+  await writeMark("devcentr-dark", dcDark);
 }
 
 const invoked = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;

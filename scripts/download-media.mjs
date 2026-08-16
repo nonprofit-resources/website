@@ -27,7 +27,7 @@ const targets = [
   { id: "whole-whale", url: "https://www.wholewhale.com/favicon.ico" },
   { id: "nonprofit-tech-for-good", url: "https://www.nptechforgood.com/favicon.ico" },
   { id: "oss-fund", url: "https://www.oss.fund/favicon.ico" },
-  { id: "devcentr", url: "https://devcentr.org/favicon.ico" },
+  { id: "devcentr", url: "https://devcentr.org/brand/logo.svg" },
   { id: "openshellorg", url: "https://openshellorg.github.io/favicon.ico" },
   { id: "linx-photos", url: "https://linx.photos/favicon.ico" },
   { id: "instalay", url: "https://github.githubassets.com/favicons/favicon.png" },

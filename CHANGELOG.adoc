@@ -10,6 +10,7 @@
 * Dark-mode site logo uses black hand outlines instead of cream.
 * Home hero: **Browse | Free** split control, outline for open-source, orange outline for Suggest a resource. Free uses the same primary fill as Browse; the divider stays.
 * News subscribe writes to a Resend **News** audience and persists rows in `subscribers`. Sending domain `updates.nonprofit-resources.org` (DKIM/SPF/MX) is on Cloudflare.
+* Catalog DevCentr mark uses the orbital logo (light + on-dark), not a missing favicon or a text tile.
 
 == 2026-08-15
 
