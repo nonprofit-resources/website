@@ -42,8 +42,13 @@ jobs:
           SITE_URL: ${{ vars.SITE_URL || 'https://nonprofit-resources.org' }}
           BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL || 'https://nonprofit-resources.org' }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          ADMIN_EMAILS: ${{ secrets.ADMIN_EMAILS }}
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          CATALOG_WEBHOOK_DISPATCH_SECRET: ${{ secrets.CATALOG_WEBHOOK_DISPATCH_SECRET }}
+          CATALOG_WEBHOOK_ADMIN_TOKEN: ${{ secrets.CATALOG_WEBHOOK_ADMIN_TOKEN }}
+          OSS_FUND_GITHUB_WEBHOOK_SECRET: ${{ secrets.OSS_FUND_GITHUB_WEBHOOK_SECRET }}
+          GITHUB_DISPATCH_TOKEN: ${{ secrets.GITHUB_DISPATCH_TOKEN }}
           CUSTOMER_IO_SITE_ID: ${{ secrets.CUSTOMER_IO_SITE_ID }}
           CUSTOMER_IO_API_KEY: ${{ secrets.CUSTOMER_IO_API_KEY }}
           CUSTOMER_IO_TRACK_API_KEY: ${{ secrets.CUSTOMER_IO_TRACK_API_KEY }}
@@ -104,6 +109,13 @@ jobs:
         run: |
           netlify env:set TURSO_DATABASE_URL "${{ secrets.TURSO_DATABASE_URL }}" --site "$NETLIFY_SITE_ID" --force || true
           netlify env:set TURSO_AUTH_TOKEN "${{ secrets.TURSO_AUTH_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set BETTER_AUTH_SECRET "${{ secrets.BETTER_AUTH_SECRET }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set BETTER_AUTH_URL "${{ vars.BETTER_AUTH_URL || 'https://nonprofit-resources.org' }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set ADMIN_EMAILS "${{ secrets.ADMIN_EMAILS }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set CATALOG_WEBHOOK_DISPATCH_SECRET "${{ secrets.CATALOG_WEBHOOK_DISPATCH_SECRET }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set CATALOG_WEBHOOK_ADMIN_TOKEN "${{ secrets.CATALOG_WEBHOOK_ADMIN_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set OSS_FUND_GITHUB_WEBHOOK_SECRET "${{ secrets.OSS_FUND_GITHUB_WEBHOOK_SECRET }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set GITHUB_DISPATCH_TOKEN "${{ secrets.GITHUB_DISPATCH_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -119,3 +131,18 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Notify catalog webhooks
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        run: |
+          if [ -z "${{ secrets.CATALOG_WEBHOOK_DISPATCH_SECRET }}" ]; then
+            echo "No dispatch secret; skip"
+            exit 0
+          fi
+          curl -sS -X POST "${SITE_URL}/api/webhooks/dispatch" \
+            -H "Content-Type: application/json" \
+            -H "x-catalog-webhook-token: ${{ secrets.CATALOG_WEBHOOK_DISPATCH_SECRET }}" \
+            -d '{"reason":"deploy ${{ github.sha }}"}'
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://nonprofit-resources.org' }}

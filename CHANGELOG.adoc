@@ -2,9 +2,15 @@
 
 == 2026-08-15
 
+* OSS.Fund listed as a featured meta-directory; live OSS-friendly / nonprofit-tagged platforms imported from `oss-fund/directory` (CC BY 4.0) into a new **Open source** category and “For open-source projects” filter (`?oss=1`).
+* Catalog pull API `GET /api/catalog`, outbound `catalog.updated` webhooks, inbound GitHub hook at `/api/webhooks/github`, and a scheduled `Sync OSS.Fund` workflow (OSS.Fund has no HTTP API).
 * Regenerated `public/favicon.svg` from the org giving-hand logo (tab icon was still the old lettermark). Apple touch icon points at `logo-256.png`.
+
 * Extracted `logo-only.svg` (hand + heart, no cream tile) plus PNG siblings at 512 and 256.
 * Favicon keeps the cream tile but scales the mark up so it sits close to the edge (`pnpm logo:export`). The full `logo.svg` still uses the looser branding pad.
+* Auth stays **Better Auth** (email/password + optional GitHub) with Drizzle `user` / `session` / `account` / `verification` tables created on first use.
+* Offerings schema now models **programs** vs **platform apps** (Google for Nonprofits → Workspace, Ad Grants, YouTube, Maps; Microsoft → M365 + Azure credits). App search results use a stacked platform+app mark. Entity pages list child apps; apps live at `/services/<program>/<app>`.
+* Compare tray + `/compare` sideways feature table. Operator notes wait on **human org verification** (`/account`, `/staff`, Turso tables `org_profiles` / `offering_reviews`).
 
 == 2026-08-11
 

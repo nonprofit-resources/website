@@ -21,7 +21,13 @@ pnpm dev
 ----
 
 Copy `.env.example` to `.env` and fill Turso / auth / mail keys when ready.
-Local catalog works from seed data without Turso; auth and submissions need a database URL.
+Local catalog works from seed data without Turso; auth, submissions, operator notes, and human verification need a database URL (`file:./data/local.db` locally, Turso `libsql://…` on Netlify).
+
+Set `ADMIN_EMAILS` to the people who may open `/staff` and approve org verification.
+
+== Catalog feed
+
+`GET /api/catalog` is a public JSON dump (CORS on). Outbound webhooks and the OSS.Fund GitHub ingest live under `/api/webhooks`. See link:content/guides/keep-the-catalog-in-sync.adoc[Keep the catalog in sync]. Refresh the import with `pnpm catalog:sync-oss-fund`.
 
 == Deploy
 
