@@ -26,26 +26,26 @@ export function LogoMark(props: ComponentProps<"svg">) {
           d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
         />
       </g>
-      <path
-        class="fill-primary"
-        stroke="#F7F4EC"
-        stroke-width="2"
-        stroke-linejoin="round"
-        d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
-      />
-      <path
-        class="fill-primary"
-        stroke="#F7F4EC"
-        stroke-width="2"
-        stroke-linejoin="round"
-        d="M30 78c0-5 4-9 9-9h5c3.3 0 6 2.7 6 6v16c0 2.8-2.2 5-5 5h-4c-6.1 0-11-4.9-11-11V78z"
-      />
-      <rect x="48" y="54" width="10" height="28" rx="5" class="fill-primary" stroke="#F7F4EC" stroke-width="2" />
-      <rect x="61" y="50" width="10" height="32" rx="5" class="fill-primary" stroke="#F7F4EC" stroke-width="2" />
-      <rect x="74" y="52" width="10" height="30" rx="5" class="fill-primary" stroke="#F7F4EC" stroke-width="2" />
-      <rect x="87" y="56" width="10" height="26" rx="5" class="fill-primary" stroke="#F7F4EC" stroke-width="2" />
-      <path stroke="#F7F4EC" stroke-width="1.8" stroke-linecap="round" d="M50.5 64h5M63.5 62h5M76.5 63h5M89.5 65h5" />
-      <path stroke="#F7F4EC" stroke-width="1.8" stroke-linecap="round" d="M50 80c8 4 22 4 30 0" />
+      <g class="stroke-[#F7F4EC] dark:stroke-black">
+        <path
+          class="fill-primary"
+          stroke-width="2"
+          stroke-linejoin="round"
+          d="M40 84c0-6.6 5.4-12 12-12h36c6.6 0 12 5.4 12 12v8c0 5.5-4.5 10-10 10H50c-5.5 0-10-4.5-10-10v-8z"
+        />
+        <path
+          class="fill-primary"
+          stroke-width="2"
+          stroke-linejoin="round"
+          d="M30 78c0-5 4-9 9-9h5c3.3 0 6 2.7 6 6v16c0 2.8-2.2 5-5 5h-4c-6.1 0-11-4.9-11-11V78z"
+        />
+        <rect x="48" y="54" width="10" height="28" rx="5" class="fill-primary" stroke-width="2" />
+        <rect x="61" y="50" width="10" height="32" rx="5" class="fill-primary" stroke-width="2" />
+        <rect x="74" y="52" width="10" height="30" rx="5" class="fill-primary" stroke-width="2" />
+        <rect x="87" y="56" width="10" height="26" rx="5" class="fill-primary" stroke-width="2" />
+        <path stroke-width="1.8" stroke-linecap="round" d="M50.5 64h5M63.5 62h5M76.5 63h5M89.5 65h5" />
+        <path stroke-width="1.8" stroke-linecap="round" d="M50 80c8 4 22 4 30 0" />
+      </g>
     </svg>
   );
 }
