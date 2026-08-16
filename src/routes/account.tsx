@@ -1,5 +1,5 @@
 import { Title } from "@solidjs/meta";
-import { A } from "@solidjs/router";
+import { Navigate } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 import { Button } from "~/components/ui/button";
 import { authClient } from "~/lib/auth-client";
@@ -66,20 +66,11 @@ export default function AccountPage() {
   }
 
   return (
-    <div class="mx-auto max-w-lg space-y-6">
-      <Title>Account · {SITE_NAME}</Title>
-      <h1 class="font-display text-3xl font-semibold">Account</h1>
-      <Show
-        when={session().data?.user}
-        fallback={
-          <p class="text-sm text-muted-foreground">
-            <A href="/auth" class="text-primary underline">
-              Sign in
-            </A>{" "}
-            first. Feedback on offerings only publishes after a human verifies the org.
-          </p>
-        }
-      >
+    <Show when={!session().isPending} fallback={<p class="text-muted-foreground">Loading…</p>}>
+      <Show when={session().data?.user} fallback={<Navigate href="/auth?next=/account" />}>
+        <div class="mx-auto max-w-lg space-y-6">
+          <Title>Account · {SITE_NAME}</Title>
+          <h1 class="font-display text-3xl font-semibold">Account</h1>
         <p class="text-sm text-muted-foreground">
           Status: <span class="font-medium text-foreground">{status()}</span>
           <Show when={!db()}>
@@ -135,11 +126,16 @@ export default function AccountPage() {
         <Button
           type="button"
           variant="ghost"
-          onClick={() => authClient.signOut({ fetchOptions: { onSuccess: () => location.reload() } })}
+          onClick={() =>
+            authClient.signOut({
+              fetchOptions: { onSuccess: () => location.assign("/auth?next=/account") },
+            })
+          }
         >
           Sign out
         </Button>
+        </div>
       </Show>
-    </div>
+    </Show>
   );
 }

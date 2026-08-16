@@ -3,6 +3,7 @@
 == 2026-08-16
 
 * Catalog marks swap for the site theme (`html.dark`): white GitHub invertocat, white AWS smile, and cream-on-forest tiles for partner placeholders. Colorful vendor marks are unchanged. Header octocat follows the same white-on-dark treatment.
+* Account links send signed-out visitors to the sign-in page, then back to `/account` after they authenticate.
 
 == 2026-08-15
 
