@@ -1,7 +1,8 @@
 import { A } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { isInCompare, toggleCompare } from "~/lib/compare-cart";
+import { isInCompare, toggleCompare, canAddToCompare, firstComparedService } from "~/lib/compare-cart";
+import { compareLaneLabel } from "~/lib/compare-peers";
 import { darkMarkHint, resolvedMarkHint } from "~/lib/service-marks";
 import {
   CATEGORY_LABELS,
@@ -131,24 +132,36 @@ function AppBadge() {
 }
 
 export function CompareToggle(props: { service: ServiceSeed; class?: string }) {
+  const inCart = () => isInCompare(props.service.id);
+  const blocked = () => !inCart() && !canAddToCompare(props.service.id);
+  const reason = () => {
+    const first = firstComparedService();
+    if (!first) return undefined;
+    return `Compare is limited to ${compareLaneLabel(first)}`;
+  };
   return (
     <button
       type="button"
       class={cn(
         "rounded-md border px-2 py-1 text-[11px] font-medium uppercase tracking-wide",
-        isInCompare(props.service.id)
+        inCart()
           ? "border-primary bg-primary/15 text-primary"
-          : "border-border text-muted-foreground hover:text-foreground",
+          : blocked()
+            ? "cursor-not-allowed border-border text-muted-foreground/50"
+            : "border-border text-muted-foreground hover:text-foreground",
         props.class,
       )}
-      aria-pressed={isInCompare(props.service.id)}
+      aria-pressed={inCart()}
+      disabled={blocked()}
+      title={blocked() ? reason() : undefined}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (blocked()) return;
         toggleCompare(props.service.id);
       }}
     >
-      {isInCompare(props.service.id) ? "In compare" : "Compare"}
+      {inCart() ? "In compare" : "Compare"}
     </button>
   );
 }

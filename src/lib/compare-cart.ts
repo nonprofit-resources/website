@@ -1,7 +1,10 @@
 import { createSignal } from "solid-js";
+import { compareCompatible } from "./compare-peers";
+import { getServiceById } from "./services-seed";
 
 const STORAGE = "nr-compare";
-export const COMPARE_MAX = 8;
+/** Soft cap so a URL dump cannot paste the whole catalog; the table itself is n-column. */
+export const COMPARE_MAX = 32;
 
 function readStored(): string[] {
   if (typeof localStorage === "undefined") return [];
@@ -43,10 +46,33 @@ export function isInCompare(id: string) {
   return compareIds().includes(id);
 }
 
+export function firstComparedService() {
+  for (const id of compareIds()) {
+    const found = getServiceById(id);
+    if (found) return found;
+  }
+}
+
+export function canAddToCompare(id: string) {
+  if (isInCompare(id)) return false;
+  if (compareIds().length >= COMPARE_MAX) return false;
+  const candidate = getServiceById(id);
+  if (!candidate) return false;
+  const first = firstComparedService();
+  if (!first) return true;
+  return compareCompatible(first, candidate);
+}
+
 export function setCompareFromList(ids: string[]) {
   const next = [...new Set(ids)].slice(0, COMPARE_MAX);
   setCompareIds(next);
   writeStored(next);
+}
+
+export function addCompare(id: string) {
+  if (!canAddToCompare(id)) return false;
+  setCompareFromList([...compareIds(), id]);
+  return true;
 }
 
 export function toggleCompare(id: string) {
@@ -55,8 +81,7 @@ export function toggleCompare(id: string) {
     setCompareFromList(cur.filter((x) => x !== id));
     return;
   }
-  if (cur.length >= COMPARE_MAX) return;
-  setCompareFromList([...cur, id]);
+  addCompare(id);
 }
 
 export function clearCompare() {

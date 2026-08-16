@@ -1,6 +1,7 @@
 import { A, useSearchParams } from "@solidjs/router";
 import { Title } from "@solidjs/meta";
 import { For, Show, createMemo, createEffect, onMount } from "solid-js";
+import { CompareSearch } from "~/components/compare-search";
 import { PlatformAppMark } from "~/components/service-views";
 import { Button } from "~/components/ui/button";
 import {
@@ -8,6 +9,7 @@ import {
   compareIds,
   setCompareFromList,
   toggleCompare,
+  COMPARE_MAX,
 } from "~/lib/compare-cart";
 import { COMPARE_FEATURES, formatCompareValue } from "~/lib/compare-features";
 import { compareValuesOf, getServiceById, serviceHref, type ServiceSeed } from "~/lib/services-seed";
@@ -49,23 +51,26 @@ export default function ComparePage() {
   return (
     <div class="space-y-6 pb-20">
       <Title>Compare · {SITE_NAME}</Title>
-      <div>
-        <h1 class="font-display text-3xl font-semibold">Compare</h1>
-        <p class="mt-1 max-w-2xl text-muted-foreground">
-          Scroll sideways through offering columns. Add items from search or an entity page. Feature
-          rows stay pinned on the left.
-        </p>
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h1 class="font-display text-3xl font-semibold">Compare</h1>
+          <p class="mt-1 max-w-2xl text-muted-foreground">
+            Add as many offerings as you need. Columns scroll sideways; the feature labels stay
+            pinned. After the first pick, the search only lists the same category and type.
+          </p>
+        </div>
+        <CompareSearch />
       </div>
 
       <Show
         when={offerings().length > 0}
         fallback={
           <p class="rounded-lg border border-dashed border-border px-6 py-12 text-center text-sm text-muted-foreground">
-            Nothing in the tray yet. Open{" "}
+            Search above to start a table, or add items from{" "}
             <A href="/services" class="text-primary underline">
               Services
-            </A>{" "}
-            and tap Compare.
+            </A>
+            .
           </p>
         }
       >
@@ -99,6 +104,11 @@ export default function ComparePage() {
                     </th>
                   )}
                 </For>
+                <Show when={offerings().length < COMPARE_MAX}>
+                  <th class="min-w-64 border-l border-border px-4 py-3 align-bottom font-normal">
+                    <CompareSearch compact class="max-w-none" />
+                  </th>
+                </Show>
               </tr>
             </thead>
             <tbody>
@@ -108,7 +118,7 @@ export default function ComparePage() {
                     <tr class="border-t border-border bg-muted/40">
                       <th
                         class="sticky left-0 z-10 bg-muted/40 px-4 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
-                        colSpan={offerings().length + 1}
+                        colSpan={offerings().length + (offerings().length < COMPARE_MAX ? 2 : 1)}
                       >
                         {group}
                       </th>
@@ -126,6 +136,9 @@ export default function ComparePage() {
                               </td>
                             )}
                           </For>
+                          <Show when={offerings().length < COMPARE_MAX}>
+                            <td class="border-l border-border px-4 py-2.5 text-muted-foreground">—</td>
+                          </Show>
                         </tr>
                       )}
                     </For>
@@ -136,7 +149,7 @@ export default function ComparePage() {
           </table>
         </div>
         <A href="/services">
-          <Button variant="outline">Add more from catalog</Button>
+          <Button variant="outline">Browse catalog</Button>
         </A>
       </Show>
     </div>
