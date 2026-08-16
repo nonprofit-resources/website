@@ -41,7 +41,8 @@ export default function AuthPage() {
       <Title>Account · {SITE_NAME}</Title>
       <h1 class="font-display text-3xl font-semibold">Account</h1>
       <p class="text-sm text-muted-foreground">
-        Sign in to track submissions. GitHub OAuth works when client credentials are configured.
+        Sign in to track submissions and request human verification before public notes. GitHub
+        OAuth works when client credentials are configured.
       </p>
       <form class="space-y-3 rounded-lg border border-border bg-card p-6" onSubmit={onSubmit}>
         <input

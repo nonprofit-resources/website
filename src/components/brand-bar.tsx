@@ -30,11 +30,11 @@ export function BrandBar() {
             <Github class="size-5" />
           </a>
           <A
-            href="/auth"
-            class="hidden text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:inline"
-          >
-            {t("nav_account")}
-          </A>
+          href="/account"
+          class="hidden text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:inline"
+        >
+          {t("nav_account")}
+        </A>
         </div>
       </div>
     </div>
