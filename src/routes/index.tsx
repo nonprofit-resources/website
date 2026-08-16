@@ -37,7 +37,7 @@ export default function Home() {
               </A>
               <A
                 href="/services?free=1"
-                class="inline-flex h-11 items-center justify-center border-l border-primary-foreground/25 bg-primary/75 px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/65 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                class="inline-flex h-11 items-center justify-center border-l border-primary-foreground/25 bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 {t("cta_browse_free")}
               </A>
