@@ -1,5 +1,68 @@
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 
+/** Better Auth core tables — email/password + optional GitHub. Do not swap this adapter. */
+export const user = sqliteTable("user", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
+  image: text("image"),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+export const session = sqliteTable(
+  "session",
+  {
+    id: text("id").primaryKey(),
+    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    token: text("token").notNull().unique(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+  },
+  (t) => [index("session_userId_idx").on(t.userId)],
+);
+
+export const account = sqliteTable(
+  "account",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id").notNull(),
+    providerId: text("provider_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    accessToken: text("access_token"),
+    refreshToken: text("refresh_token"),
+    idToken: text("id_token"),
+    accessTokenExpiresAt: integer("access_token_expires_at", { mode: "timestamp_ms" }),
+    refreshTokenExpiresAt: integer("refresh_token_expires_at", { mode: "timestamp_ms" }),
+    scope: text("scope"),
+    password: text("password"),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (t) => [index("account_userId_idx").on(t.userId)],
+);
+
+export const verification = sqliteTable(
+  "verification",
+  {
+    id: text("id").primaryKey(),
+    identifier: text("identifier").notNull(),
+    value: text("value").notNull(),
+    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (t) => [index("verification_identifier_idx").on(t.identifier)],
+);
+
 /**
  * Catalog services — filter columns are first-class so Turso queries can index them
  * (absolutely_free, resource_kind, intermediary_required, offer_type, category).
@@ -31,6 +94,10 @@ export const services = sqliteTable(
     screenshotPath: text("screenshot_path"),
     lastVerifiedAt: text("last_verified_at").notNull(),
     stalenessStatus: text("staleness_status").notNull().default("active"),
+    listingKind: text("listing_kind").notNull().default("standalone"),
+    parentId: text("parent_id"),
+    compareJson: text("compare_json").notNull().default("{}"),
+    details: text("details"),
   },
   (t) => [
     index("services_absolutely_free_idx").on(t.absolutelyFree),
@@ -81,3 +148,43 @@ export const posts = sqliteTable("posts", {
   publishedAt: text("published_at").notNull(),
   summary: text("summary"),
 });
+
+export const orgProfiles = sqliteTable("org_profiles", {
+  userId: text("user_id").primaryKey(),
+  email: text("email").notNull(),
+  displayName: text("display_name"),
+  orgName: text("org_name"),
+  ein: text("ein"),
+  orgWebsite: text("org_website"),
+  evidenceNote: text("evidence_note"),
+  status: text("status").notNull().default("unverified"),
+  submittedAt: text("submitted_at"),
+  reviewedAt: text("reviewed_at"),
+  reviewedBy: text("reviewed_by"),
+  reviewerNote: text("reviewer_note"),
+});
+
+export const webhookEndpoints = sqliteTable("webhook_endpoints", {
+  id: text("id").primaryKey(),
+  url: text("url").notNull(),
+  secret: text("secret").notNull(),
+  eventsJson: text("events_json").notNull().default('["catalog.updated"]'),
+  createdAt: text("created_at").notNull(),
+  lastDeliveryAt: text("last_delivery_at"),
+  lastStatus: integer("last_status"),
+  disabled: integer("disabled", { mode: "boolean" }).notNull().default(false),
+  note: text("note"),
+});
+
+export const offeringReviews = sqliteTable(
+  "offering_reviews",
+  {
+    id: text("id").primaryKey(),
+    serviceId: text("service_id").notNull(),
+    userId: text("user_id").notNull(),
+    body: text("body").notNull(),
+    rating: integer("rating"),
+    createdAt: text("created_at").notNull(),
+  },
+  (t) => [index("reviews_service_idx").on(t.serviceId)],
+);
