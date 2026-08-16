@@ -127,6 +127,15 @@ export async function ensureCommunitySchema() {
         `CREATE INDEX IF NOT EXISTS reviews_service_idx ON offering_reviews (service_id)`,
       );
       await c.execute(`
+        CREATE TABLE IF NOT EXISTS subscribers (
+          id TEXT PRIMARY KEY,
+          email TEXT NOT NULL UNIQUE,
+          created_at TEXT NOT NULL,
+          source TEXT NOT NULL DEFAULT 'news',
+          cio_synced INTEGER NOT NULL DEFAULT 0
+        )
+      `);
+      await c.execute(`
         CREATE TABLE IF NOT EXISTS webhook_endpoints (
           id TEXT PRIMARY KEY,
           url TEXT NOT NULL,

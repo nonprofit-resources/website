@@ -1,4 +1,4 @@
-import { subscribeNewsEmail } from "~/lib/customerio";
+import { subscribeNewsEmail } from "~/lib/news-subscribe";
 
 export async function POST(event: { request: Request }) {
   try {

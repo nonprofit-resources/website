@@ -20,7 +20,9 @@ export function SubscribeForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Subscribe failed");
       setStatus("ok");
-      setMessage(data.mocked ? "Subscribed (dev mode — Customer.io not configured)." : "You are subscribed.");
+      setMessage(
+        data.mocked ? "Subscribed (dev mode — email provider is not configured)." : "You are subscribed.",
+      );
       setEmail("");
     } catch (err) {
       setStatus("err");

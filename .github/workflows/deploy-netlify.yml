@@ -116,6 +116,9 @@ jobs:
           netlify env:set CATALOG_WEBHOOK_ADMIN_TOKEN "${{ secrets.CATALOG_WEBHOOK_ADMIN_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
           netlify env:set OSS_FUND_GITHUB_WEBHOOK_SECRET "${{ secrets.OSS_FUND_GITHUB_WEBHOOK_SECRET }}" --site "$NETLIFY_SITE_ID" --force || true
           netlify env:set GITHUB_DISPATCH_TOKEN "${{ secrets.GITHUB_DISPATCH_TOKEN }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set RESEND_API_KEY "${{ secrets.RESEND_API_KEY }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set RESEND_FROM "${{ vars.RESEND_FROM || 'support@updates.nonprofit-resources.org' }}" --site "$NETLIFY_SITE_ID" --force || true
+          netlify env:set RESEND_NEWS_AUDIENCE_ID "${{ vars.RESEND_NEWS_AUDIENCE_ID }}" --site "$NETLIFY_SITE_ID" --force || true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
