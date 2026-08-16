@@ -8,6 +8,7 @@
 * Footer “Ryan Johnson” points at ryanjohnson.dev.
 * Primary nav only highlights the current section (Compare no longer stays selected on every page). Catalog “Absolutely free” is a checkbox row above the chips, not an orange-bordered chip.
 * Dark-mode site logo uses black hand outlines instead of cream.
+* Home hero: **Browse | Free** split control, outline for open-source, orange outline for Suggest a resource.
 
 == 2026-08-15
 
