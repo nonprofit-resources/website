@@ -2,6 +2,7 @@
 
 == 2026-08-25
 
+* Fix Sync OSS.Fund CI: fetch `chore/oss-fund-sync` before `--force-with-lease` so the bot push no longer fails with stale remote info.
 * OSS.Fund import provenance: each synced listing keeps sticky `firstImportedAt` and content-hash `lastUpdatedAt`; summary and details use `Imported from OSS.Fund on <date> under CC BY 4.0` (`pnpm catalog:sync-oss-fund`).
 * Self-host Plus Jakarta Sans (Fontsource variable) and preload the Latin woff2 so first paint no longer waits on Google Fonts.
 * Catalog filters: replace “Hide meta-directories” with a positive **Meta-directories** chip (on by default). Turning it off excludes meta listings (`?meta=0`; legacy `?nometa=1` still works). Active-filter count only ticks when meta is excluded.

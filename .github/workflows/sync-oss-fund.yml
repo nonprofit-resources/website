@@ -47,9 +47,18 @@ jobs:
           fi
           git checkout -B chore/oss-fund-sync
           git commit -m "Refresh OSS.Fund catalog import."
-          git push -u origin HEAD --force-with-lease || git push -u origin HEAD
+          # Shallow main checkout has no remote-tracking tip for this branch, so
+          # --force-with-lease alone fails with "stale info" and a plain push is
+          # rejected. Fetch the remote tip first so lease has a baseline.
+          git fetch origin "refs/heads/chore/oss-fund-sync:refs/remotes/origin/chore/oss-fund-sync" || true
+          if git rev-parse --verify refs/remotes/origin/chore/oss-fund-sync >/dev/null 2>&1; then
+            git push -u origin HEAD --force-with-lease
+          else
+            git push -u origin HEAD
+          fi
           if ! gh pr list --head chore/oss-fund-sync --state open --json number --jq 'length' | grep -q '^[1-9]'; then
             gh pr create \
               --title "Refresh OSS.Fund catalog import" \
               --body "Automated import from [oss-fund/directory](https://github.com/oss-fund/directory) (CC BY 4.0). OSS.Fund does not publish an HTTP API; this job clones their GitHub posts."
           fi
+
