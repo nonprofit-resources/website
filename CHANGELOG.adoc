@@ -1,5 +1,10 @@
 = Changelog
 
+== 2026-08-25
+
+* TechSoup catalog mark: replace Incapsula HTML “favicon” stubs with the public S mark (Facebook page picture); media download rejects HTML bot-walls.
+* External outbound actions (`Open portal`, AlternativeTo, broker “Go to …”, footer/GitHub) use a pointer cursor; portal CTAs render as real links.
+
 == 2026-08-16
 
 * Catalog: first **CRM** listing for link:https://nonprofit-crm.com/[Nonprofit CRM] (HighLevel-based, 30-day trial then paid). Sourced from the link:https://websitelaunches.com/site/nonprofit-crm.com[Website Launches] record; offer kind “Trial, then paid”.

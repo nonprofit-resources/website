@@ -145,10 +145,10 @@ export function CompareToggle(props: { service: ServiceSeed; class?: string }) {
       class={cn(
         "rounded-md border px-2 py-1 text-[11px] font-medium uppercase tracking-wide",
         inCart()
-          ? "border-primary bg-primary/15 text-primary"
+          ? "cursor-pointer border-primary bg-primary/15 text-primary"
           : blocked()
             ? "cursor-not-allowed border-border text-muted-foreground/50"
-            : "border-border text-muted-foreground hover:text-foreground",
+            : "cursor-pointer border-border text-muted-foreground hover:text-foreground",
         props.class,
       )}
       aria-pressed={inCart()}

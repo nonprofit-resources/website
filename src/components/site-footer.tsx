@@ -4,7 +4,7 @@ import { useI18n } from "~/lib/i18n";
 import { SITE_NAME, SUPPORT_EMAIL } from "~/lib/utils";
 
 const footLink =
-  "text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline";
+  "cursor-pointer text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline";
 
 export function SiteFooter() {
   const { t } = useI18n();

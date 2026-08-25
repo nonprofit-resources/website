@@ -24,7 +24,7 @@ export function BrandBar() {
             href={GITHUB_ORG}
             target="_blank"
             rel="noreferrer"
-            class="inline-flex size-10 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted dark:text-white"
+            class="inline-flex size-10 cursor-pointer items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted dark:text-white"
             aria-label="GitHub organization"
           >
             <Github class="size-5" />

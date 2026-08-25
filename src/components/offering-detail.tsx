@@ -138,11 +138,16 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
                             </A>
                           )}
                         </Show>
-                        <a href={dep.portalUrl} target="_blank" rel="noreferrer">
-                          <Button size="sm" variant="outline">
-                            Go to {dep.name}
-                          </Button>
-                        </a>
+                        <Button
+                          as="a"
+                          href={dep.portalUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          size="sm"
+                          variant="outline"
+                        >
+                          Go to {dep.name}
+                        </Button>
                       </div>
                     </li>
                   )}
@@ -152,14 +157,14 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
           </Show>
 
           <div class="flex flex-wrap gap-3">
-            <a href={s().directPortalUrl} target="_blank" rel="noreferrer">
-              <Button>Open portal</Button>
-            </a>
+            <Button as="a" href={s().directPortalUrl} target="_blank" rel="noreferrer">
+              Open portal
+            </Button>
             <Show when={s().alternativeToUrl}>
               {(url) => (
-                <a href={url()} target="_blank" rel="noreferrer">
-                  <Button variant="outline">Alternatives on AlternativeTo</Button>
-                </a>
+                <Button as="a" href={url()} target="_blank" rel="noreferrer" variant="outline">
+                  Alternatives on AlternativeTo
+                </Button>
               )}
             </Show>
             <CompareToggle service={s()} class="h-10 px-4 text-xs" />

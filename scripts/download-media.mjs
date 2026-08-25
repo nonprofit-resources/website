@@ -2,7 +2,7 @@
  * Download OG/screenshot-ish previews for catalogued services.
  * Uses public URLs; falls back to generated placeholder SVG if fetch fails.
  */
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeThemedMarks } from "./write-themed-marks.mjs";
@@ -18,8 +18,8 @@ const targets = [
   { id: "canva", url: "https://www.canva.com/favicon.ico" },
   { id: "slack", url: "https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png" },
   { id: "aws", url: "https://a0.awsstatic.com/libra-css/images/site/touch-icon-ipad-144-smile.png" },
-  { id: "techsoup-product-donations", url: "https://www.techsoup.org/favicon.ico" },
-  { id: "techsoup-nonprofit-software", url: "https://www.techsoup.org/favicon.ico" },
+  // techsoup.org/favicon.ico is Incapsula HTML; Facebook page picture is the public S mark.
+  { id: "techsoup", url: "https://graph.facebook.com/techsoup/picture?type=large" },
   { id: "pcs-for-people", url: "https://www.pcsforpeople.org/favicon.ico" },
   { id: "awesome-free-nonprofits", url: "https://github.githubassets.com/favicons/favicon.png" },
   { id: "awesome-nonprofit", url: "https://github.githubassets.com/favicons/favicon.png" },
@@ -59,10 +59,34 @@ function placeholderSvg(label, dark = false) {
 
 writeFileSync(join(outDir, "placeholder.svg"), placeholderSvg("Nonprofit Resources"));
 
+function looksLikeHtml(buf) {
+  const head = buf.subarray(0, 64).toString("utf8").trimStart().toLowerCase();
+  return head.startsWith("<!doctype") || head.startsWith("<html") || head.includes("<meta name=\"robots\"");
+}
+
+function isUsableImage(path) {
+  if (!existsSync(path)) return false;
+  try {
+    const buf = readFileSync(path);
+    if (buf.length < 64 || looksLikeHtml(buf)) return false;
+    // PNG / JPEG / GIF / ICO / RIFF(webp) / SVG
+    const sig = buf.subarray(0, 12);
+    if (sig[0] === 0x89 && sig[1] === 0x50) return true; // PNG
+    if (sig[0] === 0xff && sig[1] === 0xd8) return true; // JPEG
+    if (sig[0] === 0x47 && sig[1] === 0x49) return true; // GIF
+    if (sig[0] === 0x00 && sig[1] === 0x00 && sig[2] === 0x01) return true; // ICO
+    if (sig.toString("ascii", 0, 4) === "RIFF") return true;
+    if (buf.toString("utf8", 0, 200).includes("<svg")) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 async function downloadOne({ id, url }) {
   const destPng = join(outDir, `${id}.png`);
   const destIco = join(outDir, `${id}.ico`);
-  if (existsSync(destPng)) {
+  if (isUsableImage(destPng) || isUsableImage(destIco)) {
     console.log("skip", id);
     return;
   }
@@ -75,10 +99,12 @@ async function downloadOne({ id, url }) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const ctype = res.headers.get("content-type") || "";
     const buf = Buffer.from(await res.arrayBuffer());
+    if (looksLikeHtml(buf) || ctype.includes("text/html")) {
+      throw new Error("got HTML instead of image (bot wall?)");
+    }
     if (ctype.includes("svg") || ctype.includes("icon") || url.endsWith(".ico")) {
       writeFileSync(destIco, buf);
-      // Also write a tiny PNG-named file as SVG placeholder wrapper for <img>
-      writeFileSync(destPng.replace(/\.png$/, ".png"), buf);
+      writeFileSync(destPng, buf);
       console.log("ok", id, buf.length);
     } else {
       writeFileSync(destPng, buf);

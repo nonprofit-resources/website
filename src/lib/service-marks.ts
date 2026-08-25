@@ -5,6 +5,8 @@ export const MARK_ALIAS: Record<string, string> = {
   "aws-promotional-credit": "aws",
   "github-sponsors": "github",
   instalay: "github",
+  "techsoup-product-donations": "techsoup",
+  "techsoup-nonprofit-software": "techsoup",
 };
 
 /**
