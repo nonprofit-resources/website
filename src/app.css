@@ -149,3 +149,112 @@ body {
   border-radius: 0.75rem;
   border: 1px solid hsl(var(--border));
 }
+
+/* Catalog high-value filters — outer oscillating glow (rays sit outside the control). */
+.filter-glow {
+  position: relative;
+  isolation: isolate;
+  z-index: 0;
+}
+
+.filter-glow::before {
+  content: "";
+  position: absolute;
+  inset: -70%;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, transparent 30%, #000 44%, #000 64%, transparent 80%);
+  mask-image: radial-gradient(circle, transparent 30%, #000 44%, #000 64%, transparent 80%);
+  animation: filter-glow-rays 3.6s ease-in-out infinite;
+}
+
+.filter-glow-free {
+  animation: filter-glow-free-halo 2.8s ease-in-out infinite;
+}
+
+.filter-glow-free::before {
+  background:
+    radial-gradient(circle at center, hsl(42 98% 62% / 0.42) 0%, hsl(28 90% 52% / 0.16) 34%, transparent 58%),
+    repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      hsl(42 100% 68% / 0.48) 0deg 7deg,
+      transparent 7deg 24deg
+    );
+}
+
+.filter-glow-oss {
+  animation: filter-glow-oss-halo 2.8s ease-in-out infinite;
+}
+
+.filter-glow-oss::before {
+  background:
+    radial-gradient(circle at center, hsl(0 0% 100% / 0.55) 0%, hsl(210 40% 92% / 0.2) 34%, transparent 58%),
+    repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      hsl(0 0% 100% / 0.55) 0deg 7deg,
+      transparent 7deg 24deg
+    );
+}
+
+@keyframes filter-glow-free-halo {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px 2px hsl(42 95% 55% / 0.38),
+      0 0 22px 8px hsl(28 90% 50% / 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 18px 6px hsl(42 100% 60% / 0.58),
+      0 0 36px 14px hsl(28 95% 55% / 0.34);
+  }
+}
+
+@keyframes filter-glow-oss-halo {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px 2px hsl(0 0% 100% / 0.45),
+      0 0 22px 8px hsl(210 30% 85% / 0.28);
+  }
+  50% {
+    box-shadow:
+      0 0 18px 6px hsl(0 0% 100% / 0.7),
+      0 0 36px 14px hsl(210 40% 92% / 0.4);
+  }
+}
+
+@keyframes filter-glow-rays {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.94) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(14deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-glow,
+  .filter-glow::before {
+    animation: none;
+  }
+
+  .filter-glow-free {
+    box-shadow:
+      0 0 14px 4px hsl(42 95% 55% / 0.42),
+      0 0 28px 10px hsl(28 90% 50% / 0.24);
+  }
+
+  .filter-glow-oss {
+    box-shadow:
+      0 0 14px 4px hsl(0 0% 100% / 0.55),
+      0 0 28px 10px hsl(210 30% 85% / 0.32);
+  }
+
+  .filter-glow::before {
+    opacity: 0.75;
+  }
+}

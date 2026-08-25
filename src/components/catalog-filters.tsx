@@ -82,7 +82,7 @@ export function CatalogFilterPanel(props: {
         type="button"
         role="checkbox"
         aria-checked={f().absolutelyFree}
-        class="flex cursor-pointer items-center gap-2.5 self-start rounded-lg border border-border bg-background/60 px-3 py-2 text-sm text-left hover:bg-muted/40"
+        class="filter-glow filter-glow-free flex cursor-pointer items-center gap-2.5 self-start rounded-lg border border-border bg-background/60 px-3 py-2 text-sm text-left hover:bg-muted/40"
         onClick={() => patch({ absolutelyFree: !f().absolutelyFree })}
       >
         <span
@@ -130,7 +130,7 @@ export function CatalogFilterPanel(props: {
         </button>
         <button
           type="button"
-          class={cn(chip, f().openSource ? chipOn : chipOff)}
+          class={cn("filter-glow filter-glow-oss", chip, f().openSource ? chipOn : chipOff)}
           aria-pressed={f().openSource}
           onClick={() => patch({ openSource: !f().openSource })}
         >

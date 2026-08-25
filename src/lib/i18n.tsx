@@ -21,8 +21,6 @@ const dict = {
     hero_sub:
       "A living catalog of vendor nonprofit plans, DIY options, and free software — without the sales funnel.",
     cta_browse: "Browse",
-    cta_browse_free: "Free",
-    cta_oss: "Open-source projects",
     cta_submit: "Suggest a resource",
     view_grid: "Grid",
     view_list: "List",
@@ -48,8 +46,6 @@ const dict = {
     hero_sub:
       "Un catálogo vivo de planes sin fines de lucro, opciones DIY y software libre — sin embudo de ventas.",
     cta_browse: "Explorar",
-    cta_browse_free: "Gratis",
-    cta_oss: "Proyectos de código abierto",
     cta_submit: "Sugerir un recurso",
     view_grid: "Cuadrícula",
     view_list: "Lista",
@@ -75,8 +71,6 @@ const dict = {
     hero_sub:
       "Un catalogue vivant de plans nonprofit, options DIY et logiciels libres — sans tunnel commercial.",
     cta_browse: "Parcourir",
-    cta_browse_free: "Gratuit",
-    cta_oss: "Projets open source",
     cta_submit: "Suggérer une ressource",
     view_grid: "Grille",
     view_list: "Liste",

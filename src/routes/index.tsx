@@ -28,24 +28,8 @@ export default function Home() {
           <h1 class="mt-3 text-lg font-medium text-foreground/90 sm:text-xl">{t("hero_title")}</h1>
           <p class="mt-2 text-sm text-muted-foreground sm:text-base">{t("hero_sub")}</p>
           <div class="mt-6 flex flex-wrap items-center gap-2.5">
-            <div class="inline-flex overflow-hidden rounded-md" role="group" aria-label="Browse catalog">
-              <A
-                href="/services"
-                class="inline-flex h-11 items-center justify-center bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                {t("cta_browse")}
-              </A>
-              <A
-                href="/services?free=1"
-                class="inline-flex h-11 items-center justify-center border-l border-primary-foreground/25 bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                {t("cta_browse_free")}
-              </A>
-            </div>
-            <A href="/services?oss=1">
-              <Button size="lg" variant="outline">
-                {t("cta_oss")}
-              </Button>
+            <A href="/services">
+              <Button size="lg">{t("cta_browse")}</Button>
             </A>
             <A href="/submit">
               <Button
