@@ -51,6 +51,7 @@ export default function ServicesPage() {
       bypass: undefined,
       noverif: undefined,
       featured: undefined,
+      meta: undefined,
       nometa: undefined,
       cat: undefined,
       offer: undefined,

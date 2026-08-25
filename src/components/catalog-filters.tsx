@@ -48,6 +48,7 @@ export function CatalogFilterPanel(props: {
 
   const freeCount = () => servicesSeed.filter((s) => s.absolutelyFree).length;
   const ossCount = () => servicesSeed.filter((s) => isOpenSourceGeared(s)).length;
+  const metaCount = () => servicesSeed.filter((s) => s.metaResource).length;
 
   return (
     <section class="space-y-4 rounded-xl border border-border bg-card/70 p-4 sm:p-5" aria-label="Catalog filters">
@@ -141,11 +142,14 @@ export function CatalogFilterPanel(props: {
         </button>
         <button
           type="button"
-          class={cn(chip, f().excludeMeta ? chipOn : chipOff)}
-          aria-pressed={f().excludeMeta}
-          onClick={() => patch({ excludeMeta: !f().excludeMeta })}
+          class={cn(chip, f().includeMeta ? chipOn : chipOff)}
+          aria-pressed={f().includeMeta}
+          onClick={() => patch({ includeMeta: !f().includeMeta })}
         >
-          Hide meta-directories
+          Meta-directories
+          <span class="rounded bg-background/60 px-1.5 py-0.5 text-[10px] tabular-nums">
+            {metaCount()}
+          </span>
         </button>
       </div>
 

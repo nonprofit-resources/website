@@ -22,7 +22,8 @@ export interface CatalogFilterState {
   noVerification: boolean;
   featuredOnly: boolean;
   openSource: boolean;
-  excludeMeta: boolean;
+  /** When true (default), meta-directories are included; when false, they are hidden. */
+  includeMeta: boolean;
   categories: CategoryId[];
   offerTypes: OfferType[];
   resourceKinds: ResourceKind[];
@@ -38,7 +39,7 @@ export const defaultCatalogFilters = (): CatalogFilterState => ({
   noVerification: false,
   featuredOnly: false,
   openSource: false,
-  excludeMeta: false,
+  includeMeta: true,
   categories: [],
   offerTypes: [],
   resourceKinds: [],
@@ -81,7 +82,7 @@ export function applyCatalogFilters(services: ServiceSeed[], filters: CatalogFil
     if (filters.noVerification && !s.verification.every((v) => v === "none")) return false;
     if (filters.featuredOnly && !s.featured) return false;
     if (filters.openSource && !isOpenSourceGeared(s)) return false;
-    if (filters.excludeMeta && s.metaResource) return false;
+    if (!filters.includeMeta && s.metaResource) return false;
     if (filters.categories.length && !filters.categories.includes(s.category)) return false;
     if (filters.offerTypes.length && !filters.offerTypes.includes(s.offerType)) return false;
     if (filters.resourceKinds.length && !filters.resourceKinds.includes(s.resourceKind))
@@ -128,7 +129,7 @@ export function countActiveFilters(f: CatalogFilterState) {
   if (f.noVerification) n++;
   if (f.featuredOnly) n++;
   if (f.openSource) n++;
-  if (f.excludeMeta) n++;
+  if (!f.includeMeta) n++;
   n += f.categories.length;
   n += f.offerTypes.length;
   n += f.resourceKinds.length;
@@ -157,7 +158,12 @@ export function filtersFromSearchParams(params: URLSearchParams): CatalogFilterS
   base.noVerification = params.get("noverif") === "1";
   base.featuredOnly = params.get("featured") === "1";
   base.openSource = params.get("oss") === "1";
-  base.excludeMeta = params.get("nometa") === "1";
+  // Positive `meta=0|1`; legacy `nometa=1` still means hide meta-directories.
+  if (params.get("nometa") === "1" || params.get("meta") === "0") {
+    base.includeMeta = false;
+  } else if (params.get("meta") === "1") {
+    base.includeMeta = true;
+  }
   base.categories = csv("cat") as CategoryId[];
   base.offerTypes = csv("offer") as OfferType[];
   base.resourceKinds = csv("kind") as ResourceKind[];
@@ -176,7 +182,7 @@ export function filtersToSearchParams(f: CatalogFilterState): URLSearchParams {
   if (f.noVerification) p.set("noverif", "1");
   if (f.featuredOnly) p.set("featured", "1");
   if (f.openSource) p.set("oss", "1");
-  if (f.excludeMeta) p.set("nometa", "1");
+  if (!f.includeMeta) p.set("meta", "0");
   if (f.categories.length) p.set("cat", f.categories.join(","));
   if (f.offerTypes.length) p.set("offer", f.offerTypes.join(","));
   if (f.resourceKinds.length) p.set("kind", f.resourceKinds.join(","));
