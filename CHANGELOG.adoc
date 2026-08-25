@@ -2,6 +2,7 @@
 
 == 2026-08-25
 
+* Self-host Plus Jakarta Sans (Fontsource variable) and preload the Latin woff2 so first paint no longer waits on Google Fonts.
 * Catalog filters: replace “Hide meta-directories” with a positive **Meta-directories** chip (on by default). Turning it off excludes meta listings (`?meta=0`; legacy `?nometa=1` still works). Active-filter count only ticks when meta is excluded.
 * Catalog: Zeffy mark uses the public apple-touch webclip (favicon was a tiny stub).
 * Home hero CTAs simplify to **Browse** and **Suggest a resource**; catalog **Absolutely free** (warm sun) and **For open-source projects** (cool white) filters stack a steady ~10px baseline halo behind soft conic sunrays that spin continuously via `--ray-theta` (0→360°, linear) with a gentle intensity pulse — contents stay on top; no box-shadow pulse or transform-rotate of the control.

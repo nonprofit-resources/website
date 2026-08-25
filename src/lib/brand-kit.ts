@@ -110,7 +110,7 @@ export const BRAND_ASSETS: BrandAsset[] = [
 
 export const BRAND_TYPE = {
   family: "Plus Jakarta Sans",
-  stack: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',
+  stack: '"Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif',
   roles: "Display, UI, and mono all share the same family — one voice, not a newspaper stack.",
   source: "https://fonts.google.com/specimen/Plus+Jakarta+Sans",
 };
