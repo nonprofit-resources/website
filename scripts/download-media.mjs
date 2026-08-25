@@ -16,6 +16,11 @@ const targets = [
   { id: "microsoft", url: "https://www.microsoft.com/favicon.ico" },
   { id: "github", url: "https://github.githubassets.com/favicons/favicon.png" },
   { id: "canva", url: "https://www.canva.com/favicon.ico" },
+  // Site favicon is a 16px stub; apple-touch webclip is the public square mark.
+  {
+    id: "zeffy",
+    url: "https://cdn.prod.website-files.com/60af7f6d21134db12548f5b9/62571f35988311609cfeccf2_zeffy-webclip2.png",
+  },
   { id: "slack", url: "https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png" },
   { id: "aws", url: "https://a0.awsstatic.com/libra-css/images/site/touch-icon-ipad-144-smile.png" },
   // techsoup.org/favicon.ico is Incapsula HTML; Facebook page picture is the public S mark.

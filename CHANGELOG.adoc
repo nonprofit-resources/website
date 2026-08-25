@@ -2,6 +2,8 @@
 
 == 2026-08-25
 
+* Catalog: Zeffy mark uses the public apple-touch webclip (favicon was a tiny stub).
+* Home hero CTAs simplify to **Browse** and **Suggest a resource**; catalog **Absolutely free** (warm sun rays) and **For open-source projects** (white glow) filters pulse an outer halo to draw the eye.
 * Public **brand kit** at `/brand` (aliases: brand-kit, media-kit, press-kit, branding, brand-guidelines, style-guide, logo) with logo downloads, palette, type, SEO meta, and JSON-LD.
 * Guide: *Publish a brand kit (before someone scrapes your favicon)* — checklist plus Wikimedia, Mozilla, GitHub, and USWDS examples; links to `/brand`.
 * TechSoup catalog pages note the irony that they teach brand guidelines but publish no media kit; link to our `/brand`.
