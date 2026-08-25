@@ -352,6 +352,22 @@ async function main() {
       contentHashes[service.id] = hash;
     }
     items.sort((a, b) => a.name.localeCompare(b.name));
+    const prevHashes = Object.fromEntries(
+      [...previous.entries()]
+        .filter(([, v]) => v.contentHash)
+        .map(([id, v]) => [id, v.contentHash]),
+    );
+    const hashKeys = Object.keys(contentHashes).sort();
+    const prevKeys = Object.keys(prevHashes).sort();
+    const hashesUnchanged =
+      hashKeys.length === prevKeys.length &&
+      hashKeys.every((k, i) => k === prevKeys[i] && contentHashes[k] === prevHashes[k]);
+    if (hashesUnchanged) {
+      console.log(
+        `No OSS.Fund content changes (${items.length} listings); leaving ${outFile} unchanged.`,
+      );
+      return;
+    }
     const meta = {
       syncedAt: new Date().toISOString(),
       sourceCommit: resolved.commit,
