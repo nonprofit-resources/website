@@ -380,6 +380,66 @@ const handServicesSeed: ServiceSeed[] = [
     stalenessStatus: "active",
   },
   {
+    id: "zeffy",
+    slug: "zeffy",
+    name: "Zeffy",
+    category: "marketing",
+    offerType: "100_percent_free",
+    resourceKind: "vendor_plan",
+    summary:
+      "0% platform fee donations, ticketing, auctions, memberships, merch, POS, and email — donor-optional tips fund Zeffy.",
+    absolutelyFree: true,
+    intermediaryRequired: false,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.zeffy.com/",
+    alternativeToUrl: "https://alternativeto.net/software/zeffy/",
+    metaResource: false,
+    featured: true,
+    tags: ["fundraising", "donations", "ticketing", "auctions", "membership", "zeffy"],
+    iconHint: "zeffy",
+    lastVerifiedAt: "2026-08-11",
+    stalenessStatus: "active",
+  },
+  {
+    id: "zoom-nonprofits",
+    slug: "zoom-for-nonprofits",
+    name: "Zoom for Nonprofits",
+    category: "productivity",
+    offerType: "tier_discount",
+    resourceKind: "vendor_plan",
+    summary: "Discounted Zoom Workplace / webinar plans for verified nonprofits.",
+    absolutelyFree: false,
+    intermediaryRequired: false,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.zoom.com/en/pricing/zoom-for-nonprofits/",
+    alternativeToUrl: "https://alternativeto.net/software/zoom/",
+    metaResource: false,
+    tags: ["video", "meetings", "zoom"],
+    iconHint: "zoom",
+    lastVerifiedAt: "2026-08-11",
+    stalenessStatus: "active",
+  },
+  {
+    id: "dropbox-nonprofits",
+    slug: "dropbox-for-nonprofits",
+    name: "Dropbox for Nonprofits",
+    category: "productivity",
+    offerType: "tier_discount",
+    resourceKind: "vendor_plan",
+    summary:
+      "Team storage discounts — prefer a shared Business team pool; per-seat Basic invites break when folder size exceeds individual quotas.",
+    absolutelyFree: false,
+    intermediaryRequired: false,
+    verification: ["501c3_letter"],
+    directPortalUrl: "https://www.dropbox.com/nonprofits",
+    alternativeToUrl: "https://alternativeto.net/software/dropbox/",
+    metaResource: false,
+    tags: ["storage", "files", "dropbox"],
+    iconHint: "dropbox",
+    lastVerifiedAt: "2026-08-11",
+    stalenessStatus: "unverified",
+  },
+  {
     id: "slack-nonprofits",
     slug: "slack-for-nonprofits",
     name: "Slack for Nonprofits",
@@ -387,18 +447,18 @@ const handServicesSeed: ServiceSeed[] = [
     offerType: "freemium_upgrade",
     resourceKind: "vendor_plan",
     summary:
-      "Upgraded Pro plan for teams under 250 members; deep discounts on Enterprise.",
+      "Upgraded Pro plan for teams under 250 members; deep discounts on Enterprise. Often verifies via TechSoup.",
     absolutelyFree: true,
-    intermediaryRequired: false,
+    intermediaryRequired: true,
     userSeatLimit: 250,
-    verification: ["501c3_letter"],
+    verification: ["501c3_letter", "techsoup_token"],
     directPortalUrl: "https://slack.com/for-nonprofits",
     alternativeToUrl: "https://alternativeto.net/software/slack/",
     metaResource: false,
     featured: true,
-    tags: ["chat", "collaboration", "slack"],
+    tags: ["chat", "collaboration", "slack", "techsoup"],
     iconHint: "slack",
-    lastVerifiedAt: "2026-08-09",
+    lastVerifiedAt: "2026-08-11",
     stalenessStatus: "active",
   },
   {
@@ -478,8 +538,10 @@ const handServicesSeed: ServiceSeed[] = [
     verification: ["techsoup_token", "501c3_letter"],
     directPortalUrl: "https://www.techsoup.org/get-product-donations",
     metaResource: true,
+    featured: true,
     tags: ["techsoup", "donations", "licenses"],
-    lastVerifiedAt: "2026-08-09",
+    iconHint: "techsoup-product-donations",
+    lastVerifiedAt: "2026-08-11",
     stalenessStatus: "active",
   },
   {
@@ -496,7 +558,8 @@ const handServicesSeed: ServiceSeed[] = [
     directPortalUrl: "https://www.techsoup.org/nonprofit-software",
     metaResource: true,
     tags: ["techsoup", "directory"],
-    lastVerifiedAt: "2026-08-09",
+    iconHint: "techsoup-nonprofit-software",
+    lastVerifiedAt: "2026-08-11",
     stalenessStatus: "active",
   },
   {
@@ -830,6 +893,58 @@ export function compareValuesOf(s: ServiceSeed): CompareValues {
     verification: s.verification.join(", "),
     ...s.compare,
   };
+}
+
+/** Broker / token issuers that gate vendor nonprofit plans. */
+export type IntermediaryId = "techsoup" | "goodstack";
+
+export interface IntermediaryInfo {
+  id: IntermediaryId;
+  name: string;
+  /** Short line for the journey cue. */
+  role: string;
+  logoHint: string;
+  portalUrl: string;
+  /** In-catalog starting page when we list this broker. */
+  catalogSlug?: string;
+}
+
+export const INTERMEDIARIES: Record<IntermediaryId, IntermediaryInfo> = {
+  techsoup: {
+    id: "techsoup",
+    name: "TechSoup",
+    role: "Verify your org, then unlock vendor grants",
+    logoHint: "techsoup-product-donations",
+    portalUrl: "https://www.techsoup.org/",
+    catalogSlug: "techsoup-product-donations",
+  },
+  goodstack: {
+    id: "goodstack",
+    name: "Goodstack",
+    role: "Nonprofit validation token for partner discounts",
+    logoHint: "placeholder",
+    portalUrl: "https://goodstack.org/",
+  },
+};
+
+const VERIFICATION_TO_INTERMEDIARY: Partial<Record<VerificationReq, IntermediaryId>> = {
+  techsoup_token: "techsoup",
+  goodstack_token: "goodstack",
+};
+
+/** Brokers this offer depends on (excludes the broker’s own catalog rows). */
+export function dependsOnIntermediaries(s: ServiceSeed): IntermediaryInfo[] {
+  const seen = new Set<IntermediaryId>();
+  const out: IntermediaryInfo[] = [];
+  for (const v of s.verification) {
+    const id = VERIFICATION_TO_INTERMEDIARY[v];
+    if (!id || seen.has(id)) continue;
+    // Don't say TechSoup “depends on TechSoup”
+    if (s.id === id || s.id.startsWith(`${id}-`) || s.slug.startsWith(`${id}-`)) continue;
+    seen.add(id);
+    out.push(INTERMEDIARIES[id]);
+  }
+  return out;
 }
 
 export const OFFER_TYPE_LABELS: Record<OfferType, string> = {

@@ -2,7 +2,12 @@ import { A, Navigate } from "@solidjs/router";
 import { Title } from "@solidjs/meta";
 import { For, Show } from "solid-js";
 import { OfferingCommunity } from "~/components/offering-community";
-import { CompareToggle, PlatformAppMark, ServiceGrid } from "~/components/service-views";
+import {
+  CompareToggle,
+  PlatformAppMark,
+  ServiceGrid,
+  ServiceIcon,
+} from "~/components/service-views";
 import { Button } from "~/components/ui/button";
 import {
   CATEGORY_LABELS,
@@ -10,6 +15,7 @@ import {
   OFFER_TYPE_LABELS,
   RESOURCE_KIND_LABELS,
   childrenOf,
+  dependsOnIntermediaries,
   listingKindOf,
   parentOf,
   serviceHref,
@@ -21,6 +27,7 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
   const s = () => props.service;
   const parent = () => props.parent ?? parentOf(s());
   const kids = () => childrenOf(s().id);
+  const deps = () => dependsOnIntermediaries(s());
 
   return (
     <article class="space-y-8 pb-16">
@@ -104,6 +111,46 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
               </For>
             </div>
           </Show>
+          <Show when={deps().length > 0}>
+            <div class="rounded-xl border border-primary/25 bg-primary/5 p-4">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                Depends on
+              </p>
+              <p class="mt-1 text-sm text-muted-foreground">
+                Start here before the vendor portal will accept your org.
+              </p>
+              <ul class="mt-3 space-y-2">
+                <For each={deps()}>
+                  {(dep) => (
+                    <li class="flex flex-wrap items-center gap-3">
+                      <ServiceIcon name={dep.name} hint={dep.logoHint} />
+                      <div class="min-w-0 flex-1">
+                        <div class="font-medium text-foreground">{dep.name}</div>
+                        <div class="text-sm text-muted-foreground">{dep.role}</div>
+                      </div>
+                      <div class="flex flex-wrap gap-2">
+                        <Show when={dep.catalogSlug}>
+                          {(slug) => (
+                            <A href={`/services/${slug()}`}>
+                              <Button size="sm" variant="secondary">
+                                Open in catalog
+                              </Button>
+                            </A>
+                          )}
+                        </Show>
+                        <a href={dep.portalUrl} target="_blank" rel="noreferrer">
+                          <Button size="sm" variant="outline">
+                            Go to {dep.name}
+                          </Button>
+                        </a>
+                      </div>
+                    </li>
+                  )}
+                </For>
+              </ul>
+            </div>
+          </Show>
+
           <div class="flex flex-wrap gap-3">
             <a href={s().directPortalUrl} target="_blank" rel="noreferrer">
               <Button>Open portal</Button>
@@ -154,9 +201,16 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
         <div class="rounded-lg border border-border p-4">
           <dt class="text-xs uppercase tracking-wide text-muted-foreground">Intermediary</dt>
           <dd class="mt-1 text-sm">
-            {s().intermediaryRequired
-              ? "TechSoup / Goodstack (or similar) token required"
-              : "Direct vendor / no broker token"}
+            <Show
+              when={deps().length > 0}
+              fallback={
+                s().intermediaryRequired
+                  ? "Broker token required (see Depends on above)"
+                  : "Direct vendor / no broker token"
+              }
+            >
+              Depends on {deps().map((d) => d.name).join(", ")}
+            </Show>
           </dd>
         </div>
         <div class="rounded-lg border border-border p-4">

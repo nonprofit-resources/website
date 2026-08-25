@@ -11,6 +11,7 @@ export default function AttributionsPage() {
         <li>Kobalte — MIT</li>
         <li>Lucide icons — ISC</li>
         <li>Better Auth, Drizzle ORM, libSQL/Turso clients — their respective licenses</li>
+        <li>Service preview images captured from public marketing pages where permitted</li>
         <li>Seed catalog inspired by public nonprofit portals and community awesome-lists</li>
         <li>
           OSS.Fund directory data (CC BY 4.0) —{" "}
@@ -22,7 +23,6 @@ export default function AttributionsPage() {
             github.com/oss-fund/directory
           </a>
         </li>
-        <li>Service preview images captured from public marketing pages where permitted</li>
         <li>
           Analyze Queue screenshot © Transparency HOA — used as a cited example on the transparent
           fund-ask guide; source{" "}

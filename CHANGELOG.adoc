@@ -30,6 +30,8 @@
 * Added **Guides** (`content/guides`, `/guides`) for operator docs, starting with *Donate page as a ledger* (Transparency HOA–style fund balance + monthly floor on the donate view).
 * Screenshot of the public Analyze Queue page under `public/media/guides/`.
 * DevCentr Funding ideas page links here instead of duplicating the writeup.
+* Catalog: **Zeffy**, **Zoom for Nonprofits**, **Dropbox for Nonprofits**; Slack notes TechSoup verification.
+* Resource detail: visual **Depends on** block (mark + name + start CTAs) for TechSoup / Goodstack brokers, placed above Open portal.
 
 == 2026-08-09
 
