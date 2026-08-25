@@ -74,6 +74,21 @@ export function OfferingDetail(props: { service: ServiceSeed; parent?: ServiceSe
               {s().details}
             </p>
           </Show>
+          <Show when={s().tags.includes("techsoup")}>
+            <p class="max-w-3xl rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+              <span class="font-medium text-foreground">Brand-kit irony:</span> TechSoup tells
+              nonprofits to publish brand guidelines, yet has no public media kit.{" "}
+              <A href="/brand" class="text-primary underline">
+                Our brand kit
+              </A>{" "}
+              (logos, colors, type) is open so catalog partners are not hunting favicons behind bot
+              walls. Operator walkthrough:{" "}
+              <A href="/guides/publish-a-brand-kit" class="text-primary underline">
+                Publish a brand kit
+              </A>
+              .
+            </p>
+          </Show>
           <Show when={s().tags.includes("oss.fund")}>
             <p class="text-xs text-muted-foreground">
               Also listed on{" "}

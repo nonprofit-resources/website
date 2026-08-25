@@ -1,0 +1,73 @@
+= Publish a brand kit (before someone scrapes your favicon)
+:description: What belongs on a public brand kit / media kit page, how to SEO it, and examples from Wikimedia, Mozilla, GitHub — plus our own kit at /brand.
+:revdate: 2026-08-25
+
+If a journalist, partner, or sibling OSS org needs your logo at 11pm, they will take whatever loads first: a 16×16 favicon, a Facebook avatar, or an Incapsula HTML error saved as `.png`. That is not a brand strategy. It is what happens when you teach “make a brand kit” and never publish one.
+
+This guide is the operator checklist. Use it to ship a **brand kit**, **media kit**, or **press kit** page — logos, colors, type, usage — on *your* domain. Then point every “for press / partners” ask at that URL.
+
+== Start here: our kit
+
+link:/brand[Nonprofit Resources brand kit] (`/brand`) is the working example for this site:
+
+* Logo SVG/PNG downloads (tiled mark and mark-only)
+* Color palette with copyable hex
+* Typography (Plus Jakarta Sans)
+* Name, voice, and usage rules
+* SEO aliases for media kit, press kit, brand guidelines, style guide, and logo
+
+Canonical URL: link:https://nonprofit-resources.org/brand[https://nonprofit-resources.org/brand].
+
+== What to put on the page
+
+Keep one job per section. Visitors should leave with files and rules, not a slide deck about “our journey.”
+
+* **Logos** — SVG first, PNG fallbacks at useful sizes (256 for avatars). Light and dark grounds if the mark inverts.
+* **Colors** — named roles (primary, accent, ground) with hex. Optional CSS variable names if you ship a product UI.
+* **Typography** — family, stack, and a link to the licensed source (Google Fonts, Adobe, or your webfont zip).
+* **Name & voice** — full legal/product name, short form, domain, one paragraph on tone.
+* **Usage** — clear space, no stretch, no fake endorsement, contact for exceptions.
+* **Downloads** — real `<a download>` links, not a “email us for assets” form.
+
+That package *is* the media kit. Press kit and brand guidelines are the same page with better headings — do not invent three empty microsites.
+
+== SEO the boring words on purpose
+
+People search the synonyms, not your internal folder name. Put them in the title, lead, and `meta description`:
+
+* brand kit · media kit · press kit
+* brand guidelines · style guide · branding
+* logo download · SVG · PNG · favicon
+* color palette · typography
+
+Use one **canonical** URL (we use `/brand`) and optional aliases that share the page. Do not thin-out five duplicate articles.
+
+== Examples worth copying
+
+These orgs publish assets instead of hoping the favicon CDN is kind:
+
+* link:https://meta.wikimedia.org/wiki/Brand[Wikimedia Brand] — portal for logo, type, color, templates, and trademark pointers. Movement-scale, still a single front door.
+* link:https://www.mozilla.org/en-US/foundation/trademarks/policy/[Mozilla Trademark Guidelines] — rules first; pair with public Protocol assets when you need files. Trademarks and downloads are not the same document, but both exist.
+* link:https://github.com/logos[GitHub Logos and Usage] — permitted marks, do/don’t, and downloads for integrations.
+* link:https://designsystem.digital.gov/[U.S. Web Design System (USWDS)] — government design system with tokens and components; useful when your “brand” is also a product UI.
+* link:/brand[Nonprofit Resources brand kit] — small-org version of the same idea: one page, downloads, no bot wall.
+
+Steal the *shape*, not the lockup. Your mark stays yours.
+
+== The TechSoup footnote
+
+link:https://blog.techsoup.org/en-us/posts/quick-start-guide-to-nonprofit-brand-management[TechSoup’s own brand-management guide] tells nonprofits to create style guides and shared asset libraries. As of this writing they still have **no** public branding page or media kit — and `techsoup.org/favicon.ico` answers with a bot challenge instead of an icon. We note that on their catalog entries (link:/services/techsoup-product-donations[Product Donations], link:/services/techsoup-nonprofit-software[Software Directory]) and keep our assets on `/brand` so partners are not hunting social avatars.
+
+Irony is not the product. The product is a URL that returns SVG.
+
+== Ship checklist
+
+* [ ] Page live on your primary domain (not only Google Drive)
+* [ ] SVG + PNG for the primary mark; favicon matches the mark
+* [ ] Hex list copyable; typeface licensed and linked
+* [ ] Usage paragraph that forbids implied endorsement
+* [ ] Title and description include brand kit / media kit / logo language
+* [ ] Footer or About links to the kit in one click
+* [ ] Someone outside your team can download a logo without asking Slack
+
+When that list is green, the next partner who needs your logo at midnight will thank you — and your catalog neighbors will too.

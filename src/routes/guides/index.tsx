@@ -11,8 +11,8 @@ export default function GuidesIndex() {
       <div>
         <h1 class="font-display text-3xl font-semibold">Guides</h1>
         <p class="mt-1 text-muted-foreground">
-          Operator docs: fundraising patterns, vendor discounts, and how to run a donation-supported org
-          without hiding the books.
+          Operator docs: fundraising patterns, brand kits, vendor discounts, and how to run a
+          donation-supported org without hiding the books.
         </p>
       </div>
       <ul class="space-y-4">

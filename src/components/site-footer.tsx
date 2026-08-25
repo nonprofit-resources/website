@@ -78,6 +78,15 @@ export function SiteFooter() {
             <A href="/attributions" class={footLink}>
               Attributions
             </A>
+            <A href="/brand" class={footLink}>
+              Brand kit
+            </A>
+            <A href="/media-kit" class={footLink}>
+              Media kit
+            </A>
+            <A href="/press-kit" class={footLink}>
+              Press kit
+            </A>
           </nav>
           <nav class="flex flex-col gap-2" aria-label={t("footer_related")}>
             <span class="text-muted-foreground/70">{t("footer_related")}</span>

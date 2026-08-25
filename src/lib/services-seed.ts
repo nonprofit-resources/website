@@ -533,6 +533,8 @@ const handServicesSeed: ServiceSeed[] = [
     resourceKind: "meta_directory",
     summary:
       "Direct hardware and software license requests (Microsoft, Adobe, Intuit, and more).",
+    details:
+      "Broker for Microsoft, Adobe, Intuit, and other donated or discounted licenses after org verification. Admin fees can apply; offer menus change — verify on TechSoup before planning a purchase cycle.",
     absolutelyFree: false,
     intermediaryRequired: true,
     verification: ["techsoup_token", "501c3_letter"],
@@ -552,6 +554,8 @@ const handServicesSeed: ServiceSeed[] = [
     offerType: "meta_directory",
     resourceKind: "meta_directory",
     summary: "Software directory sorted by category for verified nonprofits.",
+    details:
+      "Category browse of nonprofit software after TechSoup membership/verification. Distinct from the product-donations flow; both sit under the same broker.",
     absolutelyFree: false,
     intermediaryRequired: true,
     verification: ["techsoup_token"],
