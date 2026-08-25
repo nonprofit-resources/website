@@ -4,7 +4,13 @@ export const MARK_ALIAS: Record<string, string> = {
   "awesome-nonprofit": "github",
   "aws-promotional-credit": "aws",
   "github-sponsors": "github",
+  /** Site redirects to the GitHub org/repo; no distinct public mark. */
+  houdini: "github",
   instalay: "github",
+  libreselery: "github",
+  /** microsoft365.com favicon is an HTML bot-wall stub. */
+  "microsoft-365": "microsoft",
+  thanks: "github",
   "techsoup-product-donations": "techsoup",
   "techsoup-nonprofit-software": "techsoup",
 };

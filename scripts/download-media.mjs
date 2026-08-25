@@ -5,6 +5,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 import { writeThemedMarks } from "./write-themed-marks.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -34,15 +35,82 @@ const targets = [
   { id: "oss-fund", url: "https://www.oss.fund/favicon.ico" },
   { id: "devcentr", url: "https://devcentr.org/brand/logo.svg" },
   { id: "openshellorg", url: "https://openshellorg.github.io/favicon.ico" },
-  { id: "linx-photos", url: "https://linx.photos/favicon.ico" },
+  // Current linx.photos brand SVG (do not reuse bigrpic ICO stubs).
+  { id: "linx-photos", url: "https://linx.photos/favicon.svg" },
   { id: "instalay", url: "https://github.githubassets.com/favicons/favicon.png" },
   { id: "hci-nerdz", url: "https://hci-nerdz.github.io/favicon.ico" },
   { id: "google-workspace", url: "https://workspace.google.com/favicon.ico" },
   { id: "google-ad-grants", url: "https://ads.google.com/favicon.ico" },
   { id: "youtube", url: "https://www.youtube.com/favicon.ico" },
   { id: "google-maps", url: "https://maps.gstatic.com/favicon.ico" },
-  { id: "microsoft-365", url: "https://www.microsoft365.com/favicon.ico" },
+  // microsoft365.com serves HTML as "favicon" — alias to microsoft in service-marks.ts
   { id: "microsoft-azure", url: "https://azure.microsoft.com/favicon.ico" },
+  { id: "dropbox", url: "https://cfl.dropboxstatic.com/static/metaserver/static/images/favicon.ico" },
+  { id: "zoom", url: "https://zoom.us/favicon.ico" },
+  // OSS.Fund import marks
+  { id: "algora", url: "https://algora.io/images/logo-192px.png" },
+  { id: "bepro-network", url: "https://bepro.network/favicon.ico" },
+  { id: "bountyhub", url: "https://www.bountyhub.dev/apple-touch-icon.png" },
+  {
+    id: "codeheat",
+    url: "https://i0.wp.com/codeheat.org/wp-content/uploads/2025/06/cropped-code-logo.png?fit=192%2C192&ssl=1",
+  },
+  {
+    id: "community-bridge",
+    url: "https://lfx.linuxfoundation.org/wp-content/uploads/2022/12/cropped-favicon-192x192.png",
+  },
+  {
+    id: "eventyay",
+    url: "https://eventyay.com/static/common/img/icons/apple-touch-icon-180x180.png",
+  },
+  {
+    id: "faiross",
+    url: "https://images.squarespace-cdn.com/content/5e854f063c753f3e43bf0e1d/1592340007036-536EVTQNLDK4MCR228P7/FairOSS-Icon.png?format=300w",
+  },
+  // fundrequest.io was returning 522 at audit time — skip until the portal is back.
+  { id: "gitcoin", url: "https://gitcoin.co/favicon.ico" },
+  { id: "git-pay", url: "https://gitpay.me/favicon-gitpay.ico" },
+  {
+    id: "summer-of-code",
+    url: "https://summerofcode.withgoogle.com/assets/favicons/apple-touch-icon.png",
+  },
+  { id: "goteo", url: "https://www.goteo.org/favicon.ico" },
+  {
+    id: "issue-hunt",
+    url: "https://cdn.prod.website-files.com/62308acfa5c2a57a354a083b/6237e1a0e967842500ba5c6e_issuehunt-logo-v1%201.png",
+  },
+  {
+    id: "liberapay",
+    url: "https://liberapay.com/assets/liberapay/icon-v2_black-on-yellow.200.png",
+  },
+  { id: "nl-net", url: "https://nlnet.nl/favicon.ico" },
+  { id: "numfocus", url: "https://numfocus.org/favicon.ico" },
+  {
+    id: "open-collective",
+    url: "https://opencollective.com/static/images/opencollective-icon.svg",
+  },
+  {
+    id: "open-source-design",
+    url: "https://opensourcedesign.net/images/favicons/apple-touch-icon.png",
+  },
+  { id: "osuosl", url: "https://osuosl.org/favicon/apple-touch-icon.png" },
+  {
+    id: "openssf",
+    url: "https://openssf.org/wp-content/uploads/2021/09/cropped-favicon-300x300.png",
+  },
+  { id: "opire", url: "https://opire.dev/assets/favicon.ico" },
+  {
+    id: "season-of-docs",
+    url: "https://www.gstatic.com/devrel-devsite/prod/v1acc34b77907f14029db47214a9900819f8c09315bec13906695eded017dc4b4/developers/images/touchicon-180-new.png",
+  },
+  { id: "sf-conservancy", url: "https://sfconservancy.org/static/favicon.641dcd867f20.ico" },
+  { id: "spi", url: "https://www.spi-inc.org/favicon.ico" },
+  {
+    id: "sovereign-tech-fund",
+    url: "https://www.sovereign.tech/static/images/favicons/apple-touch-icon.png",
+  },
+  // Tidelift redirects to Sonar; public favicon is the shippable mark.
+  { id: "tidelift", url: "https://www.sonarsource.com/favicon.ico" },
 ];
 
 function placeholderSvg(label, dark = false) {
@@ -65,8 +133,13 @@ function placeholderSvg(label, dark = false) {
 writeFileSync(join(outDir, "placeholder.svg"), placeholderSvg("Nonprofit Resources"));
 
 function looksLikeHtml(buf) {
-  const head = buf.subarray(0, 64).toString("utf8").trimStart().toLowerCase();
-  return head.startsWith("<!doctype") || head.startsWith("<html") || head.includes("<meta name=\"robots\"");
+  const head = buf.subarray(0, 96).toString("utf8").trimStart().toLowerCase();
+  return (
+    head.startsWith("<!doctype") ||
+    head.startsWith("<html") ||
+    head.startsWith("<!--") ||
+    head.includes("<meta name=\"robots\"")
+  );
 }
 
 function isUsableImage(path) {
@@ -88,10 +161,36 @@ function isUsableImage(path) {
   }
 }
 
+/** Many vendor .ico files embed a PNG; sharp cannot decode ICO directly. */
+function pngFromIco(buf) {
+  const sig = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  let best = null;
+  let idx = 0;
+  while (idx < buf.length) {
+    const at = buf.indexOf(sig, idx);
+    if (at < 0) break;
+    const candidate = buf.subarray(at);
+    if (!best || candidate.length > best.length) best = candidate;
+    idx = at + 8;
+  }
+  return best;
+}
+
+async function rasterizeToPng(buf, destPng) {
+  await sharp(buf, { density: 256 })
+    .resize(192, 192, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toFile(destPng);
+}
+
 async function downloadOne({ id, url }) {
   const destPng = join(outDir, `${id}.png`);
   const destIco = join(outDir, `${id}.ico`);
-  if (isUsableImage(destPng) || isUsableImage(destIco)) {
+  const destSvg = join(outDir, `${id}.svg`);
+  if (isUsableImage(destPng) || isUsableImage(destIco) || isUsableImage(destSvg)) {
     console.log("skip", id);
     return;
   }
@@ -107,14 +206,39 @@ async function downloadOne({ id, url }) {
     if (looksLikeHtml(buf) || ctype.includes("text/html")) {
       throw new Error("got HTML instead of image (bot wall?)");
     }
-    if (ctype.includes("svg") || ctype.includes("icon") || url.endsWith(".ico")) {
-      writeFileSync(destIco, buf);
-      writeFileSync(destPng, buf);
-      console.log("ok", id, buf.length);
-    } else {
-      writeFileSync(destPng, buf);
-      console.log("ok", id, buf.length);
+    const isSvg =
+      ctype.includes("svg") ||
+      url.endsWith(".svg") ||
+      buf.toString("utf8", 0, 200).includes("<svg");
+    if (isSvg) {
+      writeFileSync(destSvg, buf);
+      try {
+        await rasterizeToPng(buf, destPng);
+      } catch {
+        /* SVG alone is enough for ServiceMarkImg fallback */
+      }
+      console.log("ok", id, "svg", buf.length);
+      return;
     }
+    const isIco =
+      ctype.includes("icon") ||
+      url.includes(".ico") ||
+      (buf[0] === 0x00 && buf[1] === 0x00 && buf[2] === 0x01 && buf[3] === 0x00);
+    if (isIco) {
+      writeFileSync(destIco, buf);
+      const embedded = pngFromIco(buf);
+      if (embedded) {
+        try {
+          await rasterizeToPng(embedded, destPng);
+        } catch {
+          writeFileSync(destPng, embedded);
+        }
+      }
+      console.log("ok", id, "ico", buf.length);
+      return;
+    }
+    writeFileSync(destPng, buf);
+    console.log("ok", id, buf.length);
   } catch (err) {
     writeFileSync(join(outDir, `${id}.svg`), placeholderSvg(id));
     console.warn("fallback", id, err instanceof Error ? err.message : err);

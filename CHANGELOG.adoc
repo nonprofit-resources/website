@@ -2,6 +2,7 @@
 
 == 2026-08-25
 
+* Catalog marks: add missing OSS.Fund / vendor logos (Algora, BEPRO, BountyHub, Dropbox, Zoom, Liberapay, Open Collective, and other import hints); replace stale linx.photos bigrpic ICO with the current https://linx.photos/favicon.svg[linx.photos] brand SVG (+ raster PNG); alias Microsoft 365 / Houdini / LibreSelery / Thanks to canonical marks; media download rasterizes SVG and PNG-in-ICO for tile use.
 * Fix Sync OSS.Fund CI: commit import refreshes to `main` (org policy blocks Actions from opening PRs); skip rewriting the seed when content hashes are unchanged.
 * OSS.Fund import provenance: each synced listing keeps sticky `firstImportedAt` and content-hash `lastUpdatedAt`; summary and details use `Imported from OSS.Fund on <date> under CC BY 4.0` (`pnpm catalog:sync-oss-fund`).
 * Self-host Plus Jakarta Sans (Fontsource variable) and preload the Latin woff2 so first paint no longer waits on Google Fonts.
