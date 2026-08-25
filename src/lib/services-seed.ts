@@ -72,6 +72,10 @@ export interface ServiceSeed {
   /** Parent program id when this row is a platform app. */
   parentId?: string;
   compare?: CompareValues;
+  /** ISO date (YYYY-MM-DD) when this OSS.Fund row was first imported. Sticky across syncs. */
+  firstImportedAt?: string;
+  /** ISO date (YYYY-MM-DD) when source-derived content last changed (or first import). */
+  lastUpdatedAt?: string;
 }
 
 /** Hand-authored first-party listings. OSS.Fund imports are merged after this array. */

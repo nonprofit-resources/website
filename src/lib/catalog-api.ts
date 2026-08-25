@@ -24,6 +24,8 @@ export function catalogItemDto(s: ServiceSeed) {
     listingKind: s.listingKind ?? "standalone",
     parentId: s.parentId ?? null,
     openSource: isOpenSourceGeared(s),
+    ...(s.firstImportedAt ? { firstImportedAt: s.firstImportedAt } : {}),
+    ...(s.lastUpdatedAt ? { lastUpdatedAt: s.lastUpdatedAt } : {}),
   };
 }
 

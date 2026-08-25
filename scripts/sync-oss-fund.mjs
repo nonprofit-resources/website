@@ -4,7 +4,12 @@
  *
  * Usage: pnpm catalog:sync-oss-fund
  * Prefers local clone at %code%/github.com/.clones/oss-fund/directory, else a shallow git clone.
+ *
+ * Provenance: each imported row keeps sticky `firstImportedAt` across regenerations and
+ * bumps `lastUpdatedAt` when the source-derived content hash changes. Attribution text is
+ * "Imported from OSS.Fund on <firstImportedAt> under CC BY 4.0."
  */
+import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
 import {
   existsSync,
@@ -23,6 +28,11 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outFile = join(root, "src", "lib", "oss-fund-seed.generated.ts");
 const CODE_ROOT = process.env.code || process.env.CODE_ROOT || "C:\\code";
 const localClone = join(CODE_ROOT, "github.com", ".clones", "oss-fund", "directory");
+
+/** First commit that introduced the generated seed (git history). Used to backfill sticky dates. */
+const SEED_INTRODUCED_ON = "2026-08-15";
+const LICENSE_LABEL = "CC BY 4.0";
+const LICENSE_META = "CC-BY-4.0";
 
 const SKIP_CATEGORIES = new Set(["Merchandise", "Advertising", "Paywall", "Staking"]);
 const SKIP_TITLES = new Set([
@@ -107,6 +117,10 @@ function dateOnly(value) {
   return m ? m[0] : "2026-08-15";
 }
 
+function todayIsoDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 function mapCategory(cats) {
   const set = new Set(cats);
   if (set.has("Infrastructure")) return "cloud_hosting";
@@ -137,9 +151,57 @@ function absolutelyFree(fm) {
   return false;
 }
 
-function toService(file, fm, body) {
+function attributionPhrase(firstImportedAt) {
+  return `Imported from OSS.Fund on ${firstImportedAt} under ${LICENSE_LABEL}`;
+}
+
+function contentHash(parts) {
+  return createHash("sha256").update(JSON.stringify(parts)).digest("hex").slice(0, 16);
+}
+
+/**
+ * Read sticky provenance from the previous generated seed (and optional contentHashes in meta).
+ */
+function loadPreviousProvenance() {
+  /** @type {Map<string, { firstImportedAt?: string, lastUpdatedAt?: string, contentHash?: string }>} */
+  const map = new Map();
+  if (!existsSync(outFile)) return map;
+  const text = readFileSync(outFile, "utf8");
+  const metaMatch = text.match(/export const ossFundSeedMeta = (\{\s*[\s\S]*?\n\}) as const;/);
+  /** @type {Record<string, string>} */
+  let hashes = {};
+  if (metaMatch) {
+    try {
+      const meta = JSON.parse(metaMatch[1]);
+      if (meta && typeof meta.contentHashes === "object" && meta.contentHashes) {
+        hashes = meta.contentHashes;
+      }
+    } catch {
+      /* ignore malformed previous meta */
+    }
+  }
+  const seedMatch = text.match(/export const ossFundSeed: ServiceSeed\[\] = (\[[\s\S]*\]);\s*$/);
+  if (!seedMatch) return map;
+  try {
+    const items = JSON.parse(seedMatch[1]);
+    for (const item of items) {
+      if (!item?.id) continue;
+      map.set(item.id, {
+        firstImportedAt: item.firstImportedAt,
+        lastUpdatedAt: item.lastUpdatedAt,
+        contentHash: hashes[item.id],
+      });
+    }
+  } catch {
+    /* ignore malformed previous seed */
+  }
+  return map;
+}
+
+function toService(file, fm, body, previous, syncDate) {
   const title = unwrap(fm.title || file.replace(/\.md$/i, ""));
   const slug = slugify(title, file);
+  const id = `ossfund-${slug}`;
   const cats = asList(fm.categories);
   const tagsIn = asList(fm.tags);
   const portal = unwrap(fm.link || "");
@@ -152,41 +214,78 @@ function toService(file, fm, body) {
     ...tagsIn.map((t) => t.toLowerCase().replace(/\s+/g, "-")),
   ].filter((t) => t && t !== "live" && t !== "in-development");
   const tags = [...new Set(extraTags)];
-  const summary = desc.slice(0, 280);
   const feeNote = unwrap(fm.fee_text || fm.fee || "");
+  const lastVerifiedAt = dateOnly(fm.lastmod || fm.date);
+  const free = absolutelyFree(fm);
+  const category = mapCategory(cats);
+  const offerType = mapOffer(cats, tagsIn);
+  const resourceKind = mapKind(cats, tagsIn);
+
+  const hash = contentHash({
+    title,
+    slug,
+    desc,
+    body,
+    feeNote,
+    portal,
+    tags,
+    category,
+    offerType,
+    resourceKind,
+    free,
+    lastVerifiedAt,
+  });
+
+  const prev = previous.get(id);
+  const isNew = !prev;
+  const firstImportedAt = prev?.firstImportedAt || (isNew ? syncDate : SEED_INTRODUCED_ON);
+  const contentChanged = !prev?.contentHash || prev.contentHash !== hash;
+  const lastUpdatedAt = contentChanged
+    ? syncDate
+    : prev?.lastUpdatedAt || firstImportedAt;
+
+  const attribution = attributionPhrase(firstImportedAt);
+  // Keep the vendor blurb primary; append the dated import clause for catalog cards / quick summary.
+  const summaryBase = desc.slice(0, 220).trim();
+  const summary = `${summaryBase} ${attribution}.`.replace(/\s+/g, " ").trim();
   const details = [
     body || desc,
     feeNote ? `Fees (OSS.Fund): ${feeNote}` : "",
-    `Imported from OSS.Fund under CC BY 4.0. Canonical listing: ${ossListing}`,
+    `${attribution}. Canonical listing: ${ossListing}`,
   ]
     .filter(Boolean)
     .join("\n\n");
 
   return {
-    id: `ossfund-${slug}`,
-    slug,
-    name: title,
-    category: mapCategory(cats),
-    offerType: mapOffer(cats, tagsIn),
-    resourceKind: mapKind(cats, tagsIn),
-    summary,
-    details,
-    absolutelyFree: absolutelyFree(fm),
-    intermediaryRequired: false,
-    verification: ["none"],
-    directPortalUrl: portal || ossListing,
-    metaResource: false,
-    tags,
-    iconHint: slug,
-    lastVerifiedAt: dateOnly(fm.lastmod || fm.date),
-    stalenessStatus: "active",
-    listingKind: "standalone",
-    compare: {
-      freeCore: absolutelyFree(fm),
-      intermediary: false,
-      verification: "Open source project / maintainer (see platform terms)",
-      notes: `Source: OSS.Fund. ${feeNote}`.trim(),
+    service: {
+      id,
+      slug,
+      name: title,
+      category,
+      offerType,
+      resourceKind,
+      summary,
+      details,
+      absolutelyFree: free,
+      intermediaryRequired: false,
+      verification: ["none"],
+      directPortalUrl: portal || ossListing,
+      metaResource: false,
+      tags,
+      iconHint: slug,
+      lastVerifiedAt,
+      stalenessStatus: "active",
+      listingKind: "standalone",
+      firstImportedAt,
+      lastUpdatedAt,
+      compare: {
+        freeCore: free,
+        intermediary: false,
+        verification: "Open source project / maintainer (see platform terms)",
+        notes: `Source: OSS.Fund. ${feeNote}`.trim(),
+      },
     },
+    contentHash: hash,
   };
 }
 
@@ -235,29 +334,38 @@ export const ossFundSeed: ServiceSeed[] = ${JSON.stringify(items, null, 2)};
 }
 
 async function main() {
+  const previous = loadPreviousProvenance();
+  const syncDate = todayIsoDate();
   const resolved = await resolvePostsDir();
   try {
     const files = readdirSync(resolved.dir).filter((f) => f.endsWith(".md"));
     const items = [];
+    /** @type {Record<string, string>} */
+    const contentHashes = {};
     for (const file of files) {
       const raw = readFileSync(join(resolved.dir, file), "utf8");
       const { fm, body } = parseFrontmatter(raw);
       if (!shouldInclude(fm)) continue;
-      const service = toService(file, fm, body);
+      const { service, contentHash: hash } = toService(file, fm, body, previous, syncDate);
       if (!service.directPortalUrl) continue;
       items.push(service);
+      contentHashes[service.id] = hash;
     }
     items.sort((a, b) => a.name.localeCompare(b.name));
     const meta = {
       syncedAt: new Date().toISOString(),
       sourceCommit: resolved.commit,
       source: "https://github.com/oss-fund/directory",
-      license: "CC-BY-4.0",
+      license: LICENSE_META,
       count: items.length,
+      contentHashes,
     };
     mkdirSync(dirname(outFile), { recursive: true });
     writeFileSync(outFile, emitTs(items, meta));
     console.log(`Wrote ${items.length} OSS.Fund listings → ${outFile}`);
+    console.log(
+      `Provenance: firstImportedAt sticky (backfill ${SEED_INTRODUCED_ON}); lastUpdatedAt bumps on content hash change.`,
+    );
   } finally {
     if (resolved.cleanup) rmSync(resolved.cleanup, { recursive: true, force: true });
   }
