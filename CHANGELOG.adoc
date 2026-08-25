@@ -4,7 +4,7 @@
 
 * Catalog filters: replace “Hide meta-directories” with a positive **Meta-directories** chip (on by default). Turning it off excludes meta listings (`?meta=0`; legacy `?nometa=1` still works). Active-filter count only ticks when meta is excluded.
 * Catalog: Zeffy mark uses the public apple-touch webclip (favicon was a tiny stub).
-* Home hero CTAs simplify to **Browse** and **Suggest a resource**; catalog **Absolutely free** (warm sun) and **For open-source projects** (cool white) filters keep a steady ~10px baseline halo while soft conic rays animate via polar angle (`--ray-theta`) and intensity only (no box-shadow pulse, no transform rotate).
+* Home hero CTAs simplify to **Browse** and **Suggest a resource**; catalog **Absolutely free** (warm sun) and **For open-source projects** (cool white) filters stack a steady ~10px baseline halo behind soft conic sunrays that spin continuously via `--ray-theta` (0→360°, linear) with a gentle intensity pulse — contents stay on top; no box-shadow pulse or transform-rotate of the control.
 * Public **brand kit** at `/brand` (aliases: brand-kit, media-kit, press-kit, branding, brand-guidelines, style-guide, logo) with logo downloads, palette, type, SEO meta, and JSON-LD.
 * Guide: *Publish a brand kit (before someone scrapes your favicon)* — checklist plus Wikimedia, Mozilla, GitHub, and USWDS examples; links to `/brand`.
 * TechSoup catalog pages note the irony that they teach brand guidelines but publish no media kit; link to our `/brand`.

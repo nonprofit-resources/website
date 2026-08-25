@@ -150,7 +150,7 @@ body {
   border: 1px solid hsl(var(--border));
 }
 
-/* Catalog high-value filters — steady ~10px halo; rays animate via theta + intensity only. */
+/* Catalog high-value filters — steady halo (back) → spinning soft rays (mid) → contents (front). */
 @property --ray-theta {
   syntax: "<angle>";
   inherits: false;
@@ -169,11 +169,22 @@ body {
   z-index: 0;
 }
 
+/* 1. Baseline glow — farthest back; steady (no pulse). */
 .filter-glow::before {
   content: "";
   position: absolute;
   inset: -10px;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* 2. Sunrays — above baseline, behind label/chrome. */
+.filter-glow::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: 1;
   pointer-events: none;
   border-radius: inherit;
   --ray-theta: 0deg;
@@ -194,19 +205,32 @@ body {
     #000 72%,
     transparent 100%
   );
-  animation: filter-glow-rays 4.5s ease-in-out infinite;
+  animation:
+    filter-glow-theta 28s linear infinite,
+    filter-glow-intensity 4.5s ease-in-out infinite;
 }
 
-/* Steady baseline halo — no box-shadow keyframes. */
-.filter-glow-free {
-  box-shadow:
-    0 0 8px 2px hsl(42 95% 55% / 0.28),
-    0 0 12px 4px hsl(28 90% 50% / 0.14);
+/* 3. Contents — on top of rays. */
+.filter-glow > * {
+  position: relative;
+  z-index: 2;
 }
 
 .filter-glow-free::before {
+  box-shadow:
+    0 0 8px 2px hsl(42 95% 55% / 0.28),
+    0 0 12px 4px hsl(28 90% 50% / 0.14);
+  background: radial-gradient(
+    circle at center,
+    hsl(42 98% 62% / 0.14) 0%,
+    hsl(28 90% 52% / 0.06) 45%,
+    transparent 72%
+  );
+}
+
+.filter-glow-free::after {
   background:
-    radial-gradient(circle at center, hsl(42 98% 62% / 0.22) 0%, hsl(28 90% 52% / 0.08) 48%, transparent 74%),
+    radial-gradient(circle at center, hsl(42 98% 62% / 0.18) 0%, transparent 70%),
     /* Wide soft wedges that fade into each other (no hard conic stops). */
     conic-gradient(
       from var(--ray-theta) at 50% 50%,
@@ -229,15 +253,21 @@ body {
     );
 }
 
-.filter-glow-oss {
+.filter-glow-oss::before {
   box-shadow:
     0 0 8px 2px hsl(0 0% 100% / 0.32),
     0 0 12px 4px hsl(210 30% 85% / 0.15);
+  background: radial-gradient(
+    circle at center,
+    hsl(0 0% 100% / 0.16) 0%,
+    hsl(210 40% 92% / 0.06) 45%,
+    transparent 72%
+  );
 }
 
-.filter-glow-oss::before {
+.filter-glow-oss::after {
   background:
-    radial-gradient(circle at center, hsl(0 0% 100% / 0.28) 0%, hsl(210 40% 92% / 0.1) 48%, transparent 74%),
+    radial-gradient(circle at center, hsl(0 0% 100% / 0.2) 0%, transparent 70%),
     conic-gradient(
       from var(--ray-theta) at 50% 50%,
       hsl(0 0% 100% / 0.36) 0deg,
@@ -259,21 +289,29 @@ body {
     );
 }
 
-/* Theta sweeps the conic; intensity pulses ray strength — no transform, no halo pulse. */
-@keyframes filter-glow-rays {
+/* Seamless full-circle theta on the gradient — not transform-rotate of the box. */
+@keyframes filter-glow-theta {
+  from {
+    --ray-theta: 0deg;
+  }
+  to {
+    --ray-theta: 360deg;
+  }
+}
+
+/* Gentle intensity pulse on rays only. */
+@keyframes filter-glow-intensity {
   0%,
   100% {
-    --ray-theta: 0deg;
     --ray-intensity: 0.45;
   }
   50% {
-    --ray-theta: 22deg;
-    --ray-intensity: 0.78;
+    --ray-intensity: 0.75;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .filter-glow::before {
+  .filter-glow::after {
     animation: none;
     --ray-theta: 0deg;
     --ray-intensity: 0.6;
