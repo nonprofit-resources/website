@@ -1,5 +1,9 @@
 = Changelog
 
+== 2026-09-09
+
+* Catalog: add the attributed link:https://mcstumble.com/powerful[McStumble Powerful Websites] discovery directory from Matty McTech, including searchable source tags and the distinction between its public starter set and Premium-only full collection.
+
 == 2026-08-25
 
 * Catalog marks: add missing OSS.Fund / vendor logos (Algora, BEPRO, BountyHub, Dropbox, Zoom, Liberapay, Open Collective, and other import hints); replace stale linx.photos bigrpic ICO with the current https://linx.photos/favicon.svg[linx.photos] brand SVG (+ raster PNG); alias Microsoft 365 / Houdini / LibreSelery / Thanks to canonical marks; media download rasterizes SVG and PNG-in-ICO for tile use.
