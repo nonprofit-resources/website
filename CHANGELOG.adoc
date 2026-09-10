@@ -2,6 +2,7 @@
 
 == 2026-09-10
 
+* Catalog verify: weekly GitHub Action + `pnpm catalog:verify` re-checks stale hand-authored listings with Gemini (`gemini-2.5-flash-lite` by default), grounded on portal fetches, and opens a review PR (`CATALOG_VERIFY_GITHUB_TOKEN`). See link:docs/ENV-VARIABLES.md[docs/ENV-VARIABLES.md].
 * Crawlability: real `/robots.txt` and `/sitemap.xml` route handlers (XML/text, not SPA HTML) built from catalog, news, blog, and guides content; Netlify content-type headers for those paths.
 
 == 2026-09-09

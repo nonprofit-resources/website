@@ -1,6 +1,6 @@
 = Keep the catalog in sync
-:description: Pull our JSON catalog, or register a webhook, when sibling directories such as OSS.Fund change.
-:revdate: 2026-08-15
+:description: Pull our JSON catalog, or register a webhook, when sibling directories such as OSS.Fund change. Re-verify hand listings with Gemini.
+:revdate: 2026-09-10
 
 Open-source projects are a subset of the orgs this catalog serves. link:https://www.oss.fund/[OSS.Fund] is the sibling directory for OSS funding platforms (Open Collective, GitHub Sponsors, Liberapay, and the rest). They do **not** offer an HTTP API or webhooks. Their public source is Markdown on GitHub (CC BY 4.0): link:https://github.com/oss-fund/directory[oss-fund/directory].
 
@@ -10,6 +10,7 @@ This site therefore:
 . Imports live OSS-friendly / nonprofit-tagged platforms into the **Open source** category (`pnpm catalog:sync-oss-fund`).
 . Publishes a pull API so they — or anyone — can consume *our* catalog.
 . Offers outbound `catalog.updated` webhooks, plus an inbound GitHub receiver if OSS.Fund (or we) attach a repo webhook later.
+. Re-verifies stale **hand-authored** listings with Gemini (`pnpm catalog:verify` / weekly **Verify catalog** workflow) and opens a review PR.
 
 == Pull the catalog
 
@@ -57,9 +58,20 @@ If the maintainers of `oss-fund/directory` add a webhook:
 * Secret: the same value as `OSS_FUND_GITHUB_WEBHOOK_SECRET`
 * Events: Pushes
 
-That ping starts GitHub Actions (`repository_dispatch: oss-fund-sync`), which regenerates `src/lib/oss-fund-seed.generated.ts` and opens a PR. A daily cron does the same when no webhook is attached.
+That ping starts GitHub Actions (`repository_dispatch: oss-fund-sync`), which regenerates `src/lib/oss-fund-seed.generated.ts` and **commits directly to `main`** when the import changed (org policy blocks the default `GITHUB_TOKEN` from opening PRs). A daily cron does the same when no webhook is attached.
 
 Until they add that hook, we stay in sync by cloning their repo on a schedule.
+
+== Hand listings: Gemini verify
+
+Vendor programs and apps in `src/lib/services-seed.ts` drift (caps, seats, eligibility). The **Verify catalog** workflow runs weekly (`pnpm catalog:verify`):
+
+. Selects hand rows with `lastVerifiedAt` older than `CATALOG_VERIFY_MAX_AGE_DAYS` (skips `partner_oss`).
+. Fetches each `directPortalUrl` for evidence (Google Search only if the fetch fails).
+. Asks Gemini (`GEMINI_MODEL`, default `gemini-2.5-flash-lite`) for a JSON schema patch with citations.
+. Opens a PR via `CATALOG_VERIFY_GITHUB_TOKEN` (fine-grained PAT — see link:https://github.com/nonprofit-resources/website/blob/main/docs/ENV-VARIABLES.md[docs/ENV-VARIABLES.md]). Never auto-merges.
+
+Secrets: `GEMINI_API_KEY` (Bitwarden item **nonprofit-resources**, Google project `54406180065`) and `CATALOG_VERIFY_GITHUB_TOKEN` in GitHub Actions.
 
 == Sending listings the other way
 
@@ -68,5 +80,6 @@ OSS.Fund accepts new platforms as a pull request against `posts/` in `oss-fund/d
 == Related
 
 * Browse locally: `/services?oss=1`
-* Script: `pnpm catalog:sync-oss-fund`
+* Scripts: `pnpm catalog:sync-oss-fund`, `pnpm catalog:verify`
+* Env names: link:https://github.com/nonprofit-resources/website/blob/main/docs/ENV-VARIABLES.md[docs/ENV-VARIABLES.md]
 * OSS.Fund about page: link:https://www.oss.fund/about/[oss.fund/about]

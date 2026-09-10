@@ -14,6 +14,7 @@
     "media:marks": "node scripts/write-themed-marks.mjs",
     "logo:export": "node scripts/export-logo-png.mjs",
     "catalog:sync-oss-fund": "node scripts/sync-oss-fund.mjs",
+    "catalog:verify": "node scripts/verify-catalog.mjs",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate"
   },

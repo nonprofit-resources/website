@@ -1,0 +1,63 @@
+# Weekly Gemini re-verification of hand-authored catalog rows.
+# Opens a PR (org policy blocks GITHUB_TOKEN from creating PRs).
+name: Verify catalog
+
+on:
+  schedule:
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify stale hand catalog rows
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash-lite' }}
+          CATALOG_VERIFY_MAX_AGE_DAYS: ${{ vars.CATALOG_VERIFY_MAX_AGE_DAYS || '30' }}
+          CATALOG_VERIFY_LIMIT: ${{ vars.CATALOG_VERIFY_LIMIT || '0' }}
+          CATALOG_VERIFY_MIN_CONFIDENCE: ${{ vars.CATALOG_VERIFY_MIN_CONFIDENCE || '0.7' }}
+        run: pnpm catalog:verify
+
+      - name: Detect seed changes
+        id: changes
+        run: |
+          if git diff --quiet -- src/lib/services-seed.ts; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No seed changes; skipping PR."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.CATALOG_VERIFY_GITHUB_TOKEN }}
+          commit-message: "chore: refresh stale catalog listings via Gemini verify."
+          title: "Catalog verify: refresh stale hand listings"
+          body-path: catalog-verify-pr-body.md
+          branch: chore/catalog-verify
+          delete-branch: true
+          add-paths: |
+            src/lib/services-seed.ts
