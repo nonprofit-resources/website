@@ -35,7 +35,7 @@
     "vinxi": "^0.5.7"
   },
   "devDependencies": {
-    "@asciidoctor/core": "^3.0.4",
+    "@asciidoctor/core": "^4.1.1",
     "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^22.16.5",
     "drizzle-kit": "^0.31.4",
