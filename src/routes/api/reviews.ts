@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { offeringReviews, orgProfiles } from "~/lib/schema";
 import { ensureCommunitySchema, getDb, hasCommunityDb } from "~/lib/db";
 import { getSessionUser } from "~/lib/session";
+import { listVerifiedReviews } from "~/lib/reviews";
 import { getServiceById } from "~/lib/services-seed";
 
 export async function GET(event: { request: Request }) {
@@ -11,29 +12,7 @@ export async function GET(event: { request: Request }) {
   if (!serviceId || !getServiceById(serviceId)) {
     return Response.json({ error: "Unknown offering" }, { status: 400 });
   }
-  if (!hasCommunityDb()) {
-    return Response.json({ reviews: [], db: false });
-  }
-  await ensureCommunitySchema();
-  const db = getDb();
-  const rows = await db.select().from(offeringReviews).where(eq(offeringReviews.serviceId, serviceId));
-  const profiles = await db.select().from(orgProfiles);
-  const byUser = new Map(profiles.map((p) => [p.userId, p]));
-  const reviews = rows
-    .filter((r) => byUser.get(r.userId)?.status === "verified")
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-    .map((r) => {
-      const p = byUser.get(r.userId);
-      return {
-        id: r.id,
-        body: r.body,
-        rating: r.rating,
-        createdAt: r.createdAt,
-        orgName: p?.orgName ?? null,
-        displayName: p?.displayName ?? null,
-      };
-    });
-  return Response.json({ reviews, db: true });
+  return Response.json(await listVerifiedReviews(serviceId));
 }
 
 export async function POST(event: { request: Request }) {

@@ -2,26 +2,17 @@ import { For, onMount, Show, createResource, createSignal } from "solid-js";
 import { A } from "@solidjs/router";
 import { Button } from "~/components/ui/button";
 import { authClient } from "~/lib/auth-client";
+import type { ReviewsResult } from "~/lib/reviews";
+import { getOfferingReviews } from "~/lib/reviews-server";
 import { type ServiceSeed } from "~/lib/services-seed";
-
-interface ReviewRow {
-  id: string;
-  body: string;
-  rating: number | null;
-  createdAt: string;
-  orgName: string | null;
-  displayName: string | null;
-}
 
 export function OfferingCommunity(props: { service: ServiceSeed }) {
   const session = authClient.useSession();
   const [reviews, { refetch }] = createResource(
     () => props.service.id,
-    async (serviceId) => {
-      const res = await fetch(`/api/reviews?serviceId=${encodeURIComponent(serviceId)}`);
-      if (!res.ok) return { reviews: [] as ReviewRow[], db: false };
-      return res.json() as Promise<{ reviews: ReviewRow[]; db: boolean; error?: string }>;
-    },
+    // Server function: called directly during SSR, via RPC in the browser. Never throws.
+    (serviceId): Promise<ReviewsResult> =>
+      getOfferingReviews(serviceId).catch(() => ({ reviews: [], db: false })),
   );
   const [body, setBody] = createSignal("");
   const [rating, setRating] = createSignal("5");
