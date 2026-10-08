@@ -4,6 +4,7 @@
 
 * Bump ``@asciidoctor/core`` from 3.x to ``^4.1.1``.
 * Catalog: add the link:https://free-for.dev/[free-for.dev] meta-directory, a community-maintained list of SaaS, PaaS, and IaaS free tiers useful to nonprofit tech teams for hosting, CI/CD, and developer tooling.
+* Catalog: add link:https://getartcraft.com/[ArtCraft] as a program (free AI image and video studio under a fair-source license, with paid generation credits) and its seven Apache-2.0 Crafting Apps as platform apps: PhotoCraft, VectorCraft, FilmCraft, LightCraft, PdfCraft, EffectCraft, and DesignCraft.
 
 = Changelog
 
