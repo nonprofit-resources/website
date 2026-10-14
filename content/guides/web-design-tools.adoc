@@ -1,0 +1,41 @@
+= Web design tools (Figma-class canvas, not locked site builders)
+:description: Compare UI design tools to Figma — Penpot and Lunacy for mockups and handoff; why Framer is a poor primary home for your nonprofit site.
+:revdate: 2026-10-13
+
+**What do I need?** A tool to lay out pages and components before you code — and a *separate* plan for the live site on your domain.
+
+This guide matches the Dev-Centr reference: link:https://docs.devcentr.org/general-knowledge/reference/web-design-tools.html[Web design tools on docs.devcentr.org].
+
+== Start with Figma as the yardstick
+
+**Figma** is still the de facto standard: agencies, volunteers, and grant reports often say “Figma file.” When you evaluate anything else, ask: *Can we open what partners send? Where do libraries live? Can developers inspect CSS without a seat tax?*
+
+You do not have to pay for Figma forever — but you should know what you are replacing.
+
+== Tools we list in the catalog
+
+Browse live entries under **Design** (`/services?category=design`):
+
+* **Penpot** — open-source design platform; self-host or cloud. Best when you want open files and can treat design like other org infrastructure.
+* **Lunacy** — free desktop editor from Icons8; strong Figma (`.fig`) import when you need a native app without Figma subscriptions.
+
+Both are for **product and marketing UI design**, not for running your whole public website inside a vendor garden.
+
+== Framer — useful warning, not a default
+
+**Framer** is a **closed-source platform** that bundles design with **Framer-hosted publishing**. Short-term demos can look great; long-term you risk:
+
+* A site that does not move with you if pricing, export, or features change
+* No honest “we own the HTML” story for boards and funders
+* Duplicated truth — design in Framer, donations and forms somewhere else
+
+We **call Framer out on purpose** so teams do not mistake it for Figma-class handoff into your own repo. Prefer: design in Penpot, Lunacy, or Figma → implement in code you host (this site uses SolidStart; static generators are fine too).
+
+== Pair design with a brand kit
+
+Logos, colors, and type belong on a URL you control — see link:/guides/publish-a-brand-kit[Publish a brand kit] (`/brand` on this site).
+
+== Related
+
+* link:https://docs.devcentr.org/business-bootstrap/design/explanation/penpot.html[Penpot (Business Bootstrap)]
+* link:https://docs.devcentr.org/general-knowledge/reference/recommended-tools.html[Recommended tools — Dev-Centr]

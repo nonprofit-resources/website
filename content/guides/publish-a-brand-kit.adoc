@@ -60,6 +60,10 @@ link:https://blog.techsoup.org/en-us/posts/quick-start-guide-to-nonprofit-brand-
 
 Irony is not the product. The product is a URL that returns SVG.
 
+== Related guides
+
+* link:/guides/web-design-tools[Web design tools] — Figma-class UI canvases (Penpot, Lunacy) vs closed site builders such as Framer
+
 == Ship checklist
 
 * [ ] Page live on your primary domain (not only Google Drive)
