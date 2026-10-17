@@ -47,6 +47,37 @@ const targets = [
   { id: "microsoft-azure", url: "https://azure.microsoft.com/favicon.ico" },
   { id: "dropbox", url: "https://cfl.dropboxstatic.com/static/metaserver/static/images/favicon.ico" },
   { id: "zoom", url: "https://zoom.us/favicon.ico" },
+  // ditchly.co/icon.svg 404s for some fetch profiles; favicon.ico is the public square mark.
+  { id: "ditchly", url: "https://ditchly.co/favicon.ico" },
+  { id: "artcraft", url: "https://getartcraft.com/artcraft-icon.svg" },
+  {
+    id: "photocraft",
+    url: "https://raw.githubusercontent.com/storytold/photocraft/main/assets/app-icon/photocraft.svg",
+  },
+  {
+    id: "vectorcraft",
+    url: "https://raw.githubusercontent.com/storytold/vectorcraft/main/assets/app-icon/vectorcraft.svg",
+  },
+  {
+    id: "filmcraft",
+    url: "https://raw.githubusercontent.com/storytold/filmcraft/main/assets/app-icon/filmcraft.svg",
+  },
+  {
+    id: "lightcraft",
+    url: "https://raw.githubusercontent.com/storytold/lightcraft/main/assets/app-icon/lightcraft.svg",
+  },
+  {
+    id: "pdfcraft",
+    url: "https://raw.githubusercontent.com/storytold/pdfcraft/main/assets/app-icon/pdfcraft.svg",
+  },
+  {
+    id: "effectcraft",
+    url: "https://raw.githubusercontent.com/storytold/effectcraft/main/assets/app-icon/effectcraft.svg",
+  },
+  {
+    id: "designcraft",
+    url: "https://raw.githubusercontent.com/storytold/designcraft/main/assets/app-icon/designcraft.svg",
+  },
   // OSS.Fund import marks
   { id: "algora", url: "https://algora.io/images/logo-192px.png" },
   { id: "bepro-network", url: "https://bepro.network/favicon.ico" },
