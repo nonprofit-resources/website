@@ -2,6 +2,7 @@
 
 == Unreleased
 
+* Sign-in can email a password reset link. The link opens a page to choose a new password. Mail uses the existing Resend settings; without `RESEND_API_KEY` the page says reset email is not available yet.
 * Catalog: add link:https://ditchly.co/[Ditchly] meta-directory (free and open-source alternatives to paid software, switch guides, price-hike tracker) with public favicon mark.
 * Catalog marks: ArtCraft program mark from getartcraft.com; Crafting App marks from each app's GitHub ``assets/app-icon/*.svg``.
 * Bump ``@asciidoctor/core`` from 3.x to ``^4.1.1``.

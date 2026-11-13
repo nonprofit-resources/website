@@ -21,7 +21,7 @@ Names only — never store secret values in git. Copy [`.env.example`](../.env.e
 | `CUSTOMER_IO_SITE_ID` | [Customer.io](https://customer.io/) | News subscribe tracking site id | Optional | Customer.io → Settings → API credentials | Local `.env`, Netlify | Customer.io path unused |
 | `CUSTOMER_IO_API_KEY` | Customer.io | App API key | Optional | Same | Local `.env`, Netlify | — |
 | `CUSTOMER_IO_TRACK_API_KEY` | Customer.io | Track API key | Optional | Same | Local `.env`, Netlify | — |
-| `RESEND_API_KEY` | [Resend](https://resend.com/) | Transactional + audience mail | Optional | Resend → API Keys | Local `.env`, Netlify | Email features fail |
+| `RESEND_API_KEY` | [Resend](https://resend.com/) | Transactional mail, including password reset, and audience mail | Optional | Resend → API Keys | Local `.env`, Netlify | Password reset and other email features say they are unavailable |
 | `RESEND_FROM` | Resend | From address | Recommended | Verified domain sender | Local `.env`, Netlify / Actions vars | Example default in deploy |
 | `RESEND_NEWS_AUDIENCE_ID` | Resend | News contacts audience id | Optional | Resend → Audiences | Local `.env`, Netlify vars | News subscribe audience skip |
 | `NETLIFY_AUTH_TOKEN` | [Netlify](https://app.netlify.com/) | CLI deploy from Actions | Required for deploy workflow | Netlify → User settings → Applications → Personal access tokens | **GitHub Actions secrets only** | Deploy workflow fails |

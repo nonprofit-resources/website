@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDb } from "./db";
+import { sendTransactionalEmail } from "./email";
 import { account, session, user, verification } from "./schema";
 
 function authSecret() {
@@ -37,6 +38,19 @@ export function getAuth() {
     baseURL: process.env.BETTER_AUTH_URL ?? process.env.SITE_URL ?? "http://localhost:3000",
     emailAndPassword: {
       enabled: true,
+      revokeSessionsOnPasswordReset: true,
+      ...(process.env.RESEND_API_KEY
+        ? {
+            sendResetPassword: async ({ user, url }: { user: { email: string }; url: string }) => {
+              const safe = url.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+              await sendTransactionalEmail({
+                to: user.email,
+                subject: "Reset your Nonprofit Resources password",
+                html: `<p>Someone asked to reset the password for this account.</p><p><a href="${safe}">Choose a new password</a></p><p>If this wasn't you, ignore this email. The password stays the same until the link is opened.</p>`,
+              });
+            },
+          }
+        : {}),
     },
     socialProviders: socialProviders(),
   });

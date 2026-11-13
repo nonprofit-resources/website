@@ -23,6 +23,8 @@ export default function AuthPage() {
   const [password, setPassword] = createSignal("");
   const [mode, setMode] = createSignal<"signin" | "signup">("signin");
   const [message, setMessage] = createSignal("");
+  const [resetNote, setResetNote] = createSignal("");
+  const [resetBusy, setResetBusy] = createSignal(false);
 
   async function onSubmit(e: Event) {
     e.preventDefault();
@@ -45,6 +47,26 @@ export default function AuthPage() {
     }
   }
 
+  async function onReset(e: Event) {
+    e.preventDefault();
+    const address = String(new FormData(e.currentTarget as HTMLFormElement).get("resetEmail") ?? "").trim();
+    setResetBusy(true);
+    setResetNote("");
+    const { error } = await authClient.requestPasswordReset({
+      email: address,
+      redirectTo: `${location.origin}/reset-password`,
+    });
+    setResetBusy(false);
+    if (!error) {
+      setResetNote("sent");
+      return;
+    }
+    const status = Number((error as { status?: number }).status ?? 0);
+    const text = error.message ?? "";
+    if (/isn't enabled|not enabled/i.test(text) || status === 403 || status >= 500 || status === 0) setResetNote("unavailable");
+    else setMessage(text || "Enter the email on the account.");
+  }
+
   async function github() {
     await authClient.signIn.social({ provider: "github", callbackURL: next() });
   }
@@ -54,6 +76,9 @@ export default function AuthPage() {
       <Show when={!session().data?.user} fallback={<Navigate href={next()} />}>
         <div class="mx-auto max-w-md space-y-6">
           <Title>Sign in · {SITE_NAME}</Title>
+          <Show when={searchParams.reset === "done"}>
+            <p class="text-sm" role="status">Password updated. Sign in with your new password.</p>
+          </Show>
           <h1 class="font-display text-3xl font-semibold">Sign in</h1>
           <p class="text-sm text-muted-foreground">
             Sign in to track submissions and request human verification before public notes. GitHub
@@ -93,6 +118,29 @@ export default function AuthPage() {
             </Button>
             {message() && <p class="text-sm text-muted-foreground">{message()}</p>}
           </form>
+          <Show when={mode() === "signin"}>
+            <details class="text-sm">
+              <summary class="cursor-pointer">Forgot your password?</summary>
+              <form class="mt-3 space-y-3" onSubmit={onReset}>
+                <Show when={resetNote() === "sent"}>
+                  <p role="status">If that email is on an account with a password, we sent a reset link.</p>
+                </Show>
+                <Show when={resetNote() === "unavailable"}>
+                  <p role="status">Password reset email isn't available on this server yet.</p>
+                </Show>
+                <input
+                  name="resetEmail"
+                  type="email"
+                  required
+                  placeholder="Email"
+                  class="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                />
+                <Button type="submit" variant="outline" disabled={resetBusy()}>
+                  {resetBusy() ? "Sending…" : "Send reset link"}
+                </Button>
+              </form>
+            </details>
+          </Show>
         </div>
       </Show>
     </Show>
